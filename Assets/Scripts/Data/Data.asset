@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad6ac3622cb0dee42b27192e98e8f9c7, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  SwipeRange: 0.25
-  SwipeSpeed: 0.5
+  SwipeRange: 1
+  SwipeSpeed: 2
   _goalPosition: {x: 0.1, y: 0, z: 0}
   test:
   - {x: 0.1, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: -0.1, y: 0, z: 0}
-  forwardSpeed: 0.1
+  forwardSpeed: 1
   gravity: -9.8
-  maxJumpTime: 0.2
+  maxJumpTime: 10
+  maxJumpHeight: 10
   laneMid: 0
-  laneLeft: -1
-  laneRight: 1
+  laneLeft: -0.25
+  laneRight: 0.25
   level1Up: 0.5
   level2Up: 2

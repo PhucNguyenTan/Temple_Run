@@ -21,6 +21,7 @@ public class Player_state_jump : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        player.MoveForward();
     }
 
     public override void PhysicsUpdate()

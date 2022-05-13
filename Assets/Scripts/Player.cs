@@ -61,31 +61,23 @@ public class Player : MonoBehaviour
         pStateMachine.currentState.LogicUpdate();
     }
 
-    /*public void SetDirection(int dir)
-    {
-        startSwipe = transform.position;
-        endSwipe = transform.position + Vector3.left * dir * speed;
-        isSwiping = true;
-    }*/
 
+    #region Set functions
     public void Swipe(float direction)
     {
-        //transform.position = Vector3.Lerp(transform.position, transform.position + data._goalPosition*direction, _current);
-        _current = Mathf.MoveTowards(_current, data.SwipeRange, data.SwipeSpeed * Time.fixedDeltaTime);
-        Vector3 move = new Vector3(0f, v_current, 1f*Time.fixedDeltaTime) + data._goalPosition*direction*_current;
-        move.y += data.gravity * Time.deltaTime;
-        v_current = move.y;
-        control.Move(move);
+        _current = Mathf.MoveTowards(_current, data.SwipeRange, data.SwipeSpeed * Time.deltaTime);
+        h_current = direction*_current;
+        Debug.Log("Swipe current: " + h_current);
 
     }    
 
     public void MoveForward()
     {
-        Vector3 move = new Vector3(0f, v_current, data.forwardSpeed);
-        move.y += gravity * Time.deltaTime;
+        Vector3 move = new Vector3(h_current, v_current, data.forwardSpeed);
+        move.y += data.gravity * Time.deltaTime;
         v_current = move.y;
-        control.Move(move* Time.fixedDeltaTime);
-        Debug.Log(move.y);
+        control.Move(move * Time.deltaTime);
+        //Debug.Log("Gravity: " + move.y);
     }
 
     public void AddJumpForce()
@@ -96,9 +88,10 @@ public class Player : MonoBehaviour
     public void SetJumpVar()
     {
         float timeToApex = data.maxJumpTime / 2;
-        gravity = (-2 * data.maxJumpTime) / Mathf.Pow(timeToApex, 2);
-        initialJumpVelocity = (2 * data.maxJumpTime) / timeToApex;
+        gravity = (-2 * data.maxJumpHeight) / timeToApex*timeToApex;
+        initialJumpVelocity = (2 * data.maxJumpHeight) / timeToApex;
     }
+    #endregion
 
     #region Check functions
     public bool DoneSwiping(float direction)
@@ -106,6 +99,7 @@ public class Player : MonoBehaviour
         if (_current == data.SwipeRange)
         {
             _current = 0f;
+            h_current = 0f;
             return true;
         }
         return false;

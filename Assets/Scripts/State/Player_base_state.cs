@@ -35,6 +35,7 @@ public class Player_base_state
             player.controlInput.UsedUpInput();
             player.AddJumpForce();
         }
+        player.MoveForward();
     }
 
     public virtual void PhysicsUpdate()
