@@ -10,6 +10,10 @@ public class Camera : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = target.position + offset;
+        Vector3 targetPos = target.position + offset;
+        targetPos.x = 0f;
+        targetPos.y = 0.5f;
+        transform.position = targetPos;
+
     }
 }

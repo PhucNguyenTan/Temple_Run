@@ -30,17 +30,20 @@ public class Player_state_noSwipe : Player_base_state
         if (player.controlInput.pressLeft)
         {
             player.controlInput.UsedLeftInput();
-            player.pStateMachine.ChangeState(player.swipeLState);
+            if(!player.CheckLeftMost())
+                player.pStateMachine.ChangeState(player.swipeLState);
         }
         if (player.controlInput.pressRight)
         {
             player.controlInput.UsedRightInput();
-            player.pStateMachine.ChangeState(player.swipeRState);
+            if (!player.CheckRightMost())
+                player.pStateMachine.ChangeState(player.swipeRState);
         }
         if (player.controlInput.pressUp)
         {
             //player.pStateMachine.ChangeState(player.)
         }
+        player.MoveForward();
     }
 
     public override void PhysicsUpdate()

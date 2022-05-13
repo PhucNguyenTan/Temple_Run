@@ -53,4 +53,9 @@ public class InputHandler : MonoBehaviour
     {
         pressRight = false;
     }
+
+    public void UsedUpInput()
+    {
+        pressUp = false;
+    }
 }

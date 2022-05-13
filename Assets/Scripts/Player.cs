@@ -16,11 +16,24 @@ public class Player : MonoBehaviour
     #region Components
     public InputHandler controlInput { get; private set; }
     private BoxCollider boxCollider;
-    private CharacterController control;
+    public CharacterController control { get; private set; }
     #endregion
 
+    #region undefined variables
     private float _current;
     private Vector3 _currentPosition;
+
+    private float h_current = 0f;
+    private float v_current = 0f;
+    private float f_current = 0f;
+    private float initialJumpVelocity = 0f;
+    private float gravity;
+    #endregion
+
+    #region Health and score
+    private float health = 50f;
+    private int score = 0;
+    #endregion
 
     private void Awake()
     {
@@ -32,6 +45,9 @@ public class Player : MonoBehaviour
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
         controlInput = GetComponent<InputHandler>();
+        gravity = data.gravity;
+
+        SetJumpVar();
 
     }
 
@@ -52,13 +68,39 @@ public class Player : MonoBehaviour
         isSwiping = true;
     }*/
 
-    public void Swipe(float direction) 
+    public void Swipe(float direction)
     {
+        //transform.position = Vector3.Lerp(transform.position, transform.position + data._goalPosition*direction, _current);
         _current = Mathf.MoveTowards(_current, data.SwipeRange, data.SwipeSpeed * Time.fixedDeltaTime);
-        transform.position = Vector3.Lerp(transform.position, transform.position + data._goalPosition*direction, _current);
+        Vector3 move = new Vector3(0f, v_current, 1f*Time.fixedDeltaTime) + data._goalPosition*direction*_current;
+        move.y += data.gravity * Time.deltaTime;
+        v_current = move.y;
+        control.Move(move);
 
     }    
 
+    public void MoveForward()
+    {
+        Vector3 move = new Vector3(0f, v_current, data.forwardSpeed);
+        move.y += gravity * Time.deltaTime;
+        v_current = move.y;
+        control.Move(move* Time.fixedDeltaTime);
+        Debug.Log(move.y);
+    }
+
+    public void AddJumpForce()
+    {
+        v_current = initialJumpVelocity;
+    }
+
+    public void SetJumpVar()
+    {
+        float timeToApex = data.maxJumpTime / 2;
+        gravity = (-2 * data.maxJumpTime) / Mathf.Pow(timeToApex, 2);
+        initialJumpVelocity = (2 * data.maxJumpTime) / timeToApex;
+    }
+
+    #region Check functions
     public bool DoneSwiping(float direction)
     {
         if (_current == data.SwipeRange)
@@ -68,14 +110,18 @@ public class Player : MonoBehaviour
         }
         return false;
     }
-
-    public void MoveForward()
+    public bool CheckLeftMost()
     {
-        control.Move(Vector3.forward*Time.fixedDeltaTime*data.forwardSpeed);
+        if (transform.position.x < data.laneLeft)
+            return true;
+        return false;
     }
 
-    public void Jump()
+    public bool CheckRightMost()
     {
-
+        if (transform.position.x > data.laneRight)
+            return true;
+        return false;
     }
+    #endregion
 }

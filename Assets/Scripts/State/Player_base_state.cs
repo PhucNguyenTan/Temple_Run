@@ -30,7 +30,11 @@ public class Player_base_state
 
     public virtual void LogicUpdate()
     {
-        //player.MoveForward();
+        if (player.control.isGrounded && player.controlInput.pressUp)
+        {
+            player.controlInput.UsedUpInput();
+            player.AddJumpForce();
+        }
     }
 
     public virtual void PhysicsUpdate()

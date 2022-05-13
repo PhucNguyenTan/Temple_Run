@@ -20,3 +20,10 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: -0.1, y: 0, z: 0}
   forwardSpeed: 0.1
+  gravity: -9.8
+  maxJumpTime: 0.2
+  laneMid: 0
+  laneLeft: -1
+  laneRight: 1
+  level1Up: 0.5
+  level2Up: 2
