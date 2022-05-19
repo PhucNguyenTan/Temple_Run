@@ -19,8 +19,8 @@ public class Player_data : ScriptableObject
 
     public float laneMid = 0f;
 
-    public float laneLeft = -1f;
-    public float laneRight = 1f;
+    public float laneLeft = -0.25f;
+    public float laneRight = 0.25f;
 
     public float level1Up = 0.5f;
     public float level2Up = 1f;

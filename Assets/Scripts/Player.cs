@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         pStateMachine.currentState.LogicUpdate();
+        SetJumpVar();
     }
 
 
@@ -74,7 +75,7 @@ public class Player : MonoBehaviour
     public void MoveForward()
     {
         Vector3 move = new Vector3(h_current, v_current, data.forwardSpeed);
-        move.y += data.gravity * Time.deltaTime;
+        move.y += gravity * Time.deltaTime;
         v_current = move.y;
         control.Move(move * Time.deltaTime);
         //Debug.Log("Gravity: " + move.y);
@@ -106,14 +107,14 @@ public class Player : MonoBehaviour
     }
     public bool CheckLeftMost()
     {
-        if (transform.position.x < data.laneLeft)
+        if (transform.position.x <= data.laneLeft + 0.1f) // bandage fix
             return true;
         return false;
     }
 
     public bool CheckRightMost()
     {
-        if (transform.position.x > data.laneRight)
+        if (transform.position.x >= data.laneRight - 0.1f) // bandaage fix
             return true;
         return false;
     }

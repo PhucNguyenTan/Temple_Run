@@ -21,7 +21,7 @@ MonoBehaviour:
   - {x: -0.1, y: 0, z: 0}
   forwardSpeed: 1
   gravity: -9.8
-  maxJumpTime: 10
+  maxJumpTime: 15
   maxJumpHeight: 10
   laneMid: 0
   laneLeft: -0.25
