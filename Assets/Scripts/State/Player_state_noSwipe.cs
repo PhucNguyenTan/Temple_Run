@@ -30,13 +30,13 @@ public class Player_state_noSwipe : Player_base_state
         if (player.controlInput.pressLeft)
         {
             player.controlInput.UsedLeftInput();
-            if(!player.CheckLeftMost())
+            if(player.currentLane != data.laneLeft)
                 player.pStateMachine.ChangeState(player.swipeLState);
         }
         if (player.controlInput.pressRight)
         {
             player.controlInput.UsedRightInput();
-            if (!player.CheckRightMost())
+            if (player.currentLane != data.laneRight)
                 player.pStateMachine.ChangeState(player.swipeRState);
         }
         if (player.controlInput.pressUp)

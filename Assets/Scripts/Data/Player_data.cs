@@ -18,7 +18,6 @@ public class Player_data : ScriptableObject
     public float maxJumpHeight = 0.3f;
 
     public float laneMid = 0f;
-
     public float laneLeft = -0.25f;
     public float laneRight = 0.25f;
 

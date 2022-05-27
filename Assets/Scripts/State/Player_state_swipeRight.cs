@@ -22,10 +22,27 @@ public class Player_state_swipeRight : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        player.Swipe(1.0f);
-        if (player.DoneSwiping(1.0f))
-            player.pStateMachine.ChangeState(player.noSwipeState);
 
+        
+
+        if (!startSwipe)
+        {
+            startSwipe = true;
+            if (player.currentLane == data.laneLeft)
+            {
+                player.SetLandMid();
+            }
+            else if (player.currentLane == data.laneMid)
+            {
+                player.SetLandRight();
+            }
+        }
+
+        if (player.DoneSwiping())
+        {
+            startSwipe = false;
+            player.pStateMachine.ChangeState(player.noSwipeState);
+        }
     }
 
     public override void PhysicsUpdate()

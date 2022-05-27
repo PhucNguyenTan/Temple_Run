@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Data
   m_EditorClassIdentifier: 
   SwipeRange: 1
-  SwipeSpeed: 2
+  SwipeSpeed: 10
   _goalPosition: {x: 0.1, y: 0, z: 0}
   test:
   - {x: 0.1, y: 0, z: 0}
@@ -21,7 +21,7 @@ MonoBehaviour:
   - {x: -0.1, y: 0, z: 0}
   forwardSpeed: 1
   gravity: -9.8
-  maxJumpTime: 15
+  maxJumpTime: 10
   maxJumpHeight: 10
   laneMid: 0
   laneLeft: -0.25

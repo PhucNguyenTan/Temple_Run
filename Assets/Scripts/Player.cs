@@ -20,20 +20,20 @@ public class Player : MonoBehaviour
     #endregion
 
     #region undefined variables
-    private float _current;
-    private Vector3 _currentPosition;
 
     private float h_current = 0f;
     private float v_current = 0f;
-    private float f_current = 0f;
     private float initialJumpVelocity = 0f;
     private float gravity;
+    public float currentLane { get; private set; }
+    public float prevLane { get; private set; }
     #endregion
 
     #region Health and score
     private float health = 50f;
     private int score = 0;
     #endregion
+
 
     private void Awake()
     {
@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         controlInput = GetComponent<InputHandler>();
         gravity = data.gravity;
+        
 
         SetJumpVar();
 
@@ -59,26 +60,27 @@ public class Player : MonoBehaviour
     void Update()
     {
         pStateMachine.currentState.LogicUpdate();
+        MoveForward();
         SetJumpVar();
     }
 
 
     #region Set functions
-    public void Swipe(float direction)
-    {
-        _current = Mathf.MoveTowards(_current, data.SwipeRange, data.SwipeSpeed * Time.deltaTime);
-        h_current = direction*_current;
-        Debug.Log("Swipe current: " + h_current);
-
-    }    
-
+      
     public void MoveForward()
     {
-        Vector3 move = new Vector3(h_current, v_current, data.forwardSpeed);
+        
+
+        h_current = Mathf.Lerp(h_current, currentLane, data.SwipeSpeed * Time.deltaTime);
+        Vector3 move = new Vector3();
+
+        
         move.y += gravity * Time.deltaTime;
         v_current = move.y;
-        control.Move(move * Time.deltaTime);
-        //Debug.Log("Gravity: " + move.y);
+        move.x = h_current - transform.position.x;
+        move.z = data.forwardSpeed * Time.deltaTime;
+        control.Move(move);
+        Debug.Log("h_current :" + h_current + " Lane: "+currentLane);
     }
 
     public void AddJumpForce()
@@ -92,31 +94,25 @@ public class Player : MonoBehaviour
         gravity = (-2 * data.maxJumpHeight) / timeToApex*timeToApex;
         initialJumpVelocity = (2 * data.maxJumpHeight) / timeToApex;
     }
+
+    public void SetLandLeft() {
+        currentLane = data.laneLeft; 
+    }
+    public void SetLandRight()
+    {
+        currentLane = data.laneRight; 
+    }
+    public void SetLandMid()
+    {
+        currentLane = data.laneMid; 
+    }
     #endregion
 
     #region Check functions
-    public bool DoneSwiping(float direction)
+    public bool DoneSwiping()
     {
-        if (_current == data.SwipeRange)
-        {
-            _current = 0f;
-            h_current = 0f;
-            return true;
-        }
-        return false;
-    }
-    public bool CheckLeftMost()
-    {
-        if (transform.position.x <= data.laneLeft + 0.1f) // bandage fix
-            return true;
-        return false;
-    }
-
-    public bool CheckRightMost()
-    {
-        if (transform.position.x >= data.laneRight - 0.1f) // bandaage fix
-            return true;
-        return false;
+        return h_current == currentLane;
     }
     #endregion
+
 }

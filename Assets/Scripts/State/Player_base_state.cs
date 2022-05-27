@@ -9,6 +9,7 @@ public class Player_base_state
     protected float startTime;
     protected string animName;
     protected Player_data data;
+    protected bool startSwipe = false;
 
     public Player_base_state(Player player, Player_state_machine state_Machine, Player_data data, string animName)
     {
@@ -30,12 +31,12 @@ public class Player_base_state
 
     public virtual void LogicUpdate()
     {
+        Debug.Log(animName);
         if (player.control.isGrounded && player.controlInput.pressUp)
         {
             player.controlInput.UsedUpInput();
             player.AddJumpForce();
         }
-        player.MoveForward();
     }
 
     public virtual void PhysicsUpdate()
