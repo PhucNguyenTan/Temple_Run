@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Data
   m_EditorClassIdentifier: 
   SwipeRange: 1
-  SwipeSpeed: 10
+  SwipeSpeed: 1
   _goalPosition: {x: 0.1, y: 0, z: 0}
   test:
   - {x: 0.1, y: 0, z: 0}

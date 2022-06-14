@@ -69,18 +69,32 @@ public class Player : MonoBehaviour
       
     public void MoveForward()
     {
-        
-
+        /*
         h_current = Mathf.Lerp(h_current, currentLane, data.SwipeSpeed * Time.deltaTime);
         Vector3 move = new Vector3();
-
         
         move.y += gravity * Time.deltaTime;
         v_current = move.y;
         move.x = h_current - transform.position.x;
         move.z = data.forwardSpeed * Time.deltaTime;
-        control.Move(move);
+        //control.Move(move);
         Debug.Log("h_current :" + h_current + " Lane: "+currentLane);
+        */
+
+        h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed*Time.deltaTime);
+        Debug.Log(h_current);
+        Vector3 move = new Vector3();
+
+        move.y += gravity * Time.deltaTime;
+        v_current = move.y;
+        move.x = h_current - transform.position.x;
+        move.z = 0.0f;//data.forwardSpeed * Time.deltaTime;
+        control.Move(move);
+
+
+        //h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed * Time.deltaTime);
+
+
     }
 
     public void AddJumpForce()
