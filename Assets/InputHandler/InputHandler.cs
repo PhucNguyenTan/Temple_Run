@@ -11,6 +11,7 @@ public class InputHandler : MonoBehaviour
     public bool pressRight = false;
     public bool pressUp = false;
     public bool pressDown = false;
+    public bool pressPause = false;
 
     public void LeftInput(InputAction.CallbackContext context)
     {
@@ -44,6 +45,14 @@ public class InputHandler : MonoBehaviour
         }
     }
 
+    public void PauseInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            pressPause = true;
+        }
+    }
+
     public void UsedLeftInput()
     {
         pressLeft = false;
@@ -57,5 +66,10 @@ public class InputHandler : MonoBehaviour
     public void UsedUpInput()
     {
         pressUp = false;
+    }
+
+    public void UsedPause()
+    {
+        pressPause = false;
     }
 }
