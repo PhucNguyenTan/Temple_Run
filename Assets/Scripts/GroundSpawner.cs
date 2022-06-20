@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class GroundSpawner : MonoBehaviour
 {
-    public GameObject groundTile;
+    public GroundTile groundTile;
     public Vector3 nextSpawnPoint = Vector3.zero;
     public int tileLimit = 5;
-    private GameObject currentGround;
+    private GroundTile currentGround;
     //private GameObject[10] currentGrounds;
     //public GameObject[] arrayGround;
 
-    private List<GameObject> listGround = new List<GameObject>();
-    private GroundTile ground;
+    
+    private List<GroundTile> listGround = new List<GroundTile>();
     public bool isPause { get; private set; } = false;
 
     /*public void SpawnGround(GroundTile prevGround)
@@ -33,15 +33,23 @@ public class GroundSpawner : MonoBehaviour
         GameManager.OnStateChange += GameManager_OnStateChange;
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnStateChange -= GameManager_OnStateChange;
+    }
+
     private void GameManager_OnStateChange(GameManager.GameState state)
     {
         switch (state)
         {
             case GameManager.GameState.CountDown:
+                CreateStartingGrounds();
                 break;
             case GameManager.GameState.Pause:
+                PauseScrolling();
                 break;
             case GameManager.GameState.Run:
+                UnPauseScrolling();
                 break;
             case GameManager.GameState.End:
                 break;
@@ -55,9 +63,11 @@ public class GroundSpawner : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
+    private void Update()
     {
-        
+        if(!isPause)
+            CreateNextGround();
+
     }
 
     public void RemoveLastInList()
@@ -70,7 +80,7 @@ public class GroundSpawner : MonoBehaviour
         {
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
             listGround.Add(currentGround);
-            nextSpawnPoint = currentGround.transform.GetChild(0).transform.position; //
+            nextSpawnPoint = currentGround.transform.GetChild(0).transform.position; 
         }
     }
 
@@ -81,6 +91,7 @@ public class GroundSpawner : MonoBehaviour
             int currentListLength = listGround.Count;
             nextSpawnPoint = listGround[currentListLength - 1].transform.GetChild(0).transform.position;
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
+            currentGround.UnPause();
             listGround.Add(currentGround);
             nextSpawnPoint = currentGround.transform.GetChild(0).transform.position;
         }
@@ -90,7 +101,15 @@ public class GroundSpawner : MonoBehaviour
     {
         for (int i = 0; i < listGround.Count; i++)
         {
-            
+            listGround[i].Pause();
+        }
+    }
+    
+    public void UnPauseScrolling()
+    {
+        for (int i = 0; i < listGround.Count; i++)
+        {
+            listGround[i].UnPause();
         }
     }
 }

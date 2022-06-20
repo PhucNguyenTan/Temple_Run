@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public GameState State = GameState.CountDown;
+    public static GameState State = GameState.CountDown;
 
     public static event UnityAction<GameState> OnStateChange; //???
     public GameObject player;
@@ -20,16 +20,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateGameState(State);
-    }
-
-    private void Update()
-    {
-
+        UpdateGameState(GameState.CountDown);
     }
 
 
-    public void UpdateGameState(GameState newState)
+    public static void UpdateGameState(GameState newState)
     {
         State = newState;
 

@@ -21,7 +21,7 @@ public class Player_base_state
 
     public virtual void Enter()
     {
-        Debug.Log(animName);
+        //Debug.Log(animName);
     }
 
     public virtual void Exit()
@@ -31,10 +31,10 @@ public class Player_base_state
 
     public virtual void LogicUpdate()
     {
-        Debug.Log(animName);
+        //Debug.Log(animName);
         if (player.control.isGrounded && player.controlInput.pressUp)
         {
-            player.controlInput.UsedUpInput();
+             player.controlInput.UsedUpInput();
             player.AddJumpForce();
         }
     }

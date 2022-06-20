@@ -33,10 +33,12 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Health and score
-    private float health = 50f;
-    private int score = 0;
+    public float health { get; private set; } = 50f;
+    public int score { get; private set; } = 0;
     #endregion
 
+    [SerializeField]
+    private IGMUI ingameUI;
 
     private void Awake()
     {
@@ -57,12 +59,18 @@ public class Player : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnStateChange -= GameManagerOnStateChanged;
+    }
+
     private void GameManagerOnStateChanged(GameManager.GameState state)
     {
         switch (state)
         {
             case GameManager.GameState.CountDown:
                 isPause = true;
+                ingameUI.SetHealthValue(health);
                 break;
             case GameManager.GameState.Run:
                 isPause = false;
@@ -113,7 +121,7 @@ public class Player : MonoBehaviour
         */
 
         h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed*Time.deltaTime);
-        Debug.Log(h_current);
+        //Debug.Log(h_current);
         Vector3 move = new Vector3();
 
         move.y += gravity * Time.deltaTime;
@@ -160,5 +168,9 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    
+    public void TakeDamage()
+    {
+        health -= 10f;
+        ingameUI.SetHealthValue(health);
+    }
 }
