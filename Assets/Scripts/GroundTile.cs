@@ -10,6 +10,7 @@ public class GroundTile : MonoBehaviour
     [SerializeField]
     Player_data data;
     float[] h_positions = new float[3];
+    private bool isPause = true;
 
     private void OnTriggerExit(Collider other)
     {
@@ -27,7 +28,10 @@ public class GroundTile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = new Vector3 (transform.position.x, transform.position.y, transform.position.z - 2.0f* Time.deltaTime);
+        if (!isPause)
+        {
+            Scrolling();
+        }
     }
 
     private void SpawnObstacle()
@@ -37,4 +41,18 @@ public class GroundTile : MonoBehaviour
         Instantiate(obstacle, pointSpawnObstacle, Quaternion.identity, transform);
     }
 
+    private void Scrolling()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 2.0f * Time.deltaTime);
+    }
+
+    public void Pause()
+    {
+        isPause = true;
+    }
+
+    public void UnPause()
+    {
+        isPause = false;
+    }
 }

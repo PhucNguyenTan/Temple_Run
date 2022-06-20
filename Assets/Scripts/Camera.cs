@@ -16,4 +16,6 @@ public class Camera : MonoBehaviour
         transform.position = targetPos;
 
     }
+
+    
 }

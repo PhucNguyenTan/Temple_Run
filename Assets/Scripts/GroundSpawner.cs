@@ -12,7 +12,9 @@ public class GroundSpawner : MonoBehaviour
     //public GameObject[] arrayGround;
 
     private List<GameObject> listGround = new List<GameObject>();
-    
+    private GroundTile ground;
+    public bool isPause { get; private set; } = false;
+
     /*public void SpawnGround(GroundTile prevGround)
     {
         Vector3 spawnPOint = prevGround.transform.GetChild(0).transform.position;
@@ -26,9 +28,45 @@ public class GroundSpawner : MonoBehaviour
         nextSpawnPoint = currentGround.transform.GetChild(0).transform.position;
     }*/
 
+    private void Awake()
+    {
+        GameManager.OnStateChange += GameManager_OnStateChange;
+    }
+
+    private void GameManager_OnStateChange(GameManager.GameState state)
+    {
+        switch (state)
+        {
+            case GameManager.GameState.CountDown:
+                break;
+            case GameManager.GameState.Pause:
+                break;
+            case GameManager.GameState.Run:
+                break;
+            case GameManager.GameState.End:
+                break;
+        }
+        //throw new System.NotImplementedException();
+    }
+
     private void Start()
     {
-        for(int i=0; i<tileLimit; i++)
+        
+    }
+
+
+    private void FixedUpdate()
+    {
+        
+    }
+
+    public void RemoveLastInList()
+    {
+        listGround.RemoveAt(0);
+    }
+
+    public void CreateStartingGrounds() {
+        for (int i = 0; i < tileLimit; i++)
         {
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
             listGround.Add(currentGround);
@@ -36,22 +74,23 @@ public class GroundSpawner : MonoBehaviour
         }
     }
 
-
-    private void FixedUpdate()
+    public void CreateNextGround()
     {
-        Debug.Log(listGround.Count);
-        if(listGround.Count < tileLimit)
+        if (listGround.Count < tileLimit)
         {
             int currentListLength = listGround.Count;
-            nextSpawnPoint = listGround[currentListLength-1].transform.GetChild(0).transform.position;
+            nextSpawnPoint = listGround[currentListLength - 1].transform.GetChild(0).transform.position;
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
             listGround.Add(currentGround);
             nextSpawnPoint = currentGround.transform.GetChild(0).transform.position;
         }
     }
 
-    public void RemoveLastInList()
+    public void PauseScrolling()
     {
-        listGround.RemoveAt(0);
+        for (int i = 0; i < listGround.Count; i++)
+        {
+            
+        }
     }
 }

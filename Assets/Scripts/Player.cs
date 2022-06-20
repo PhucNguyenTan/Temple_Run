@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour
     private float gravity;
     public float currentLane { get; private set; }
     public float prevLane { get; private set; }
+
+    public bool isPause { get; private set; } = true;
     #endregion
 
     #region Health and score
@@ -46,10 +49,35 @@ public class Player : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         controlInput = GetComponent<InputHandler>();
         gravity = data.gravity;
-        
+
+        GameManager.OnStateChange += GameManagerOnStateChanged;
+
 
         SetJumpVar();
 
+    }
+
+    private void GameManagerOnStateChanged(GameManager.GameState state)
+    {
+        switch (state)
+        {
+            case GameManager.GameState.CountDown:
+                isPause = true;
+                break;
+            case GameManager.GameState.Run:
+                isPause = false;
+                break;
+            case GameManager.GameState.Pause:
+                isPause = true;
+                break;
+            case GameManager.GameState.End:
+                isPause = true;
+                break;
+            default:
+                throw new Exception("Something wrong, Patrick?");
+
+        }
+        //throw new NotImplementedException();
     }
 
     void Start()
@@ -59,9 +87,12 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        pStateMachine.currentState.LogicUpdate();
-        MoveForward();
-        SetJumpVar();
+        if (!isPause)
+        {
+            pStateMachine.currentState.LogicUpdate();
+            MoveForward();
+            SetJumpVar();
+        }
     }
 
 
@@ -129,4 +160,5 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    
 }
