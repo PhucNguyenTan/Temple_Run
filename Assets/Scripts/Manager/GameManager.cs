@@ -33,18 +33,22 @@ public class GameManager : MonoBehaviour
             case GameState.CountDown:
                 // Create UI Text coundown
                 // Text countdown
+                Debug.Log("CountDown");
                 break;
             case GameState.Run:
                 // player control enable
                 // Stage logic enable
 
+                Debug.Log("Run");
                 break;
             case GameState.Pause:
                 // player control disable
                 // Stage logic disable
                 // IGM show
+                Debug.Log("Pause");
                 break;
             case GameState.End:
+                Debug.Log("End");
                 // Show end screen with score
                 break;
         }

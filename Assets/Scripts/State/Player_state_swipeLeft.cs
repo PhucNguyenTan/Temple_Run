@@ -44,7 +44,7 @@ public class Player_state_swipeLeft : Player_base_state
         if (player.DoneSwiping())
         {
             startSwipe = false;
-            player.pStateMachine.ChangeState(player.noSwipeState);
+            player.pStateMachine.ChangeState(player.stateNoSwipe);
         }
 
     }

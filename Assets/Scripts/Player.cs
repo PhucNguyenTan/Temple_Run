@@ -7,9 +7,10 @@ public class Player : MonoBehaviour
 {
     #region State machine
     public Player_state_machine pStateMachine { get; private set; }
-    public Player_state_swipeLeft swipeLState { get; private set; }
-    public Player_state_swipeRight swipeRState { get; private set; }
-    public Player_state_noSwipe noSwipeState { get; private set; }
+    public Player_state_swipeLeft stateSwipeL { get; private set; }
+    public Player_state_swipeRight stateSwipeR { get; private set; }
+    public Player_state_noSwipe stateNoSwipe { get; private set; }
+    public Player_state_dealth stateDeath { get; private set; }
     [SerializeField]
     private Player_data data;
     #endregion
@@ -43,9 +44,10 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         pStateMachine = new Player_state_machine();
-        swipeLState = new Player_state_swipeLeft(this, pStateMachine, data, "left");
-        swipeRState = new Player_state_swipeRight(this, pStateMachine, data, "right");
-        noSwipeState = new Player_state_noSwipe(this, pStateMachine, data, "neutral");
+        stateSwipeL = new Player_state_swipeLeft(this, pStateMachine, data, "left");
+        stateSwipeR = new Player_state_swipeRight(this, pStateMachine, data, "right");
+        stateNoSwipe = new Player_state_noSwipe(this, pStateMachine, data, "neutral");
+        stateDeath = new Player_state_dealth(this, pStateMachine, data, "death"); 
 
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
@@ -69,6 +71,7 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.CountDown:
+                InitializePlayer();
                 isPause = true;
                 ingameUI.SetHealthValue(health);
                 break;
@@ -90,7 +93,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        pStateMachine.Initialize(noSwipeState);
+        pStateMachine.Initialize(stateNoSwipe);
     }
 
     void Update()
@@ -172,5 +175,18 @@ public class Player : MonoBehaviour
     {
         health -= 10f;
         ingameUI.SetHealthValue(health);
+        if(health <= 0)
+        {
+            pStateMachine.ChangeState(stateDeath);
+        }
     }
+
+    public void InitializePlayer()
+    {
+        health = 50f;
+        pStateMachine.ChangeState(stateNoSwipe);
+        transform.position = new Vector3(0f, 0.432f, 0f);
+    }
+
+    
 }

@@ -43,7 +43,8 @@ public class GroundSpawner : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.CountDown:
-                CreateStartingGrounds();
+                PauseScrolling();
+                Initialize();
                 break;
             case GameManager.GameState.Pause:
                 PauseScrolling();
@@ -52,6 +53,7 @@ public class GroundSpawner : MonoBehaviour
                 UnPauseScrolling();
                 break;
             case GameManager.GameState.End:
+                PauseScrolling();
                 break;
         }
         //throw new System.NotImplementedException();
@@ -80,7 +82,7 @@ public class GroundSpawner : MonoBehaviour
         {
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
             listGround.Add(currentGround);
-            nextSpawnPoint = currentGround.transform.GetChild(0).transform.position; 
+            nextSpawnPoint = currentGround.transform.Find("SpawnPoint").transform.position; 
         }
     }
 
@@ -111,5 +113,17 @@ public class GroundSpawner : MonoBehaviour
         {
             listGround[i].UnPause();
         }
+    }
+
+    public void Initialize()
+    {
+        for (int i = 0; i<listGround.Count; i++)
+        {
+            Debug.Log($"{listGround[i]}");
+            Destroy(listGround[i]);
+        }
+        listGround.Clear();
+        nextSpawnPoint = Vector3.zero;
+        CreateStartingGrounds();
     }
 }

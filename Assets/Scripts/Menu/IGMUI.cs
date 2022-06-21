@@ -9,7 +9,12 @@ public class IGMUI : MonoBehaviour
 {
     public bool isPause = false;
     public bool isCountDown;
-    public GameObject PauseMenuUI;
+    [SerializeField]
+    private GameObject PauseMenuUI;
+    [SerializeField]
+    private GameObject RetryMenuUI;
+    [SerializeField]
+    private GameObject CountDownUI;
 
     [SerializeField]
     private int CountDown = 3;
@@ -17,6 +22,7 @@ public class IGMUI : MonoBehaviour
     private TextMeshProUGUI displayText;
 
     private GameObject countDownText;
+    //private Panel RetryMenu;
     private Slider healthSlider;
 
 
@@ -29,8 +35,10 @@ public class IGMUI : MonoBehaviour
         countDownText = transform.Find("CountDown").gameObject;
         displayText = countDownText.GetComponent<TextMeshProUGUI>();
         healthSlider = transform.Find("Health").gameObject.GetComponent<Slider>();
-        Debug.Log(healthSlider.value);
-        
+
+        //RetryMenu = transform.Find("RetryIGM").gameObject.GetComponent<Panel>();
+
+
 
     }
 
@@ -44,6 +52,7 @@ public class IGMUI : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.CountDown:
+                InitializeIGMUI();
                 StartCoroutine(CountingDown());
                 break;
             case GameManager.GameState.Pause:
@@ -51,6 +60,7 @@ public class IGMUI : MonoBehaviour
             case GameManager.GameState.Run:
                 break;
             case GameManager.GameState.End:
+                RetryMenuUI.SetActive(true);
                 break;
         }
         //throw new System.NotImplementedException();
@@ -122,4 +132,18 @@ public class IGMUI : MonoBehaviour
     {
         healthSlider.value = health;
     }
+
+    public void RetryEndless()
+    {
+        GameManager.UpdateGameState(GameManager.GameState.CountDown);
+    }
+
+    public void InitializeIGMUI()
+    {
+        RetryMenuUI.SetActive(false);
+        PauseMenuUI.SetActive(false);
+        CountDownUI.SetActive(true);
+        CountDownDisplay = 3;
+    } 
+
 }

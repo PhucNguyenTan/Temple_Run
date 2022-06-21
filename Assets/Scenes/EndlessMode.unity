@@ -214,6 +214,10 @@ PrefabInstance:
       propertyPath: IGMUI
       value: 
       objectReference: {fileID: 2137788858}
+    - target: {fileID: 7111162291827252655, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
+      propertyPath: ingameUI
+      value: 
+      objectReference: {fileID: 2137788860}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
 --- !u!1 &58686226
@@ -987,7 +991,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &491216703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1282,7 +1286,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2137788860}
         m_TargetAssemblyTypeName: IGMUI, Assembly-CSharp
-        m_MethodName: Resume
+        m_MethodName: ToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2135,7 +2139,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2137788860}
         m_TargetAssemblyTypeName: IGMUI, Assembly-CSharp
-        m_MethodName: Resume
+        m_MethodName: RetryEndless
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2743,7 +2747,7 @@ GameObject:
   - component: {fileID: 2137788861}
   - component: {fileID: 2137788862}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: IGMUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2849,6 +2853,8 @@ MonoBehaviour:
   isPause: 0
   isCountDown: 0
   PauseMenuUI: {fileID: 1145004454}
+  RetryMenuUI: {fileID: 1915769793}
+  CountDownUI: {fileID: 491216702}
   CountDown: 3
 --- !u!114 &2137788861
 MonoBehaviour:
