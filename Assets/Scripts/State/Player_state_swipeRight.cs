@@ -43,6 +43,8 @@ public class Player_state_swipeRight : Player_base_state
             startSwipe = false;
             player.pStateMachine.ChangeState(player.stateNoSwipe);
         }
+
+        player.Swipe();
     }
 
     public override void PhysicsUpdate()

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player_state_jump : Player_base_state
 {
+    bool jumped = false;
     public Player_state_jump(Player player, Player_state_machine state_Machine, Player_data data, string animName) : base(player, state_Machine, data, animName)
     {
     }
@@ -21,11 +22,20 @@ public class Player_state_jump : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        player.MoveForward();
+        if (!jumped)
+        {
+            player.AddJumpForce();
+        }
+        else
+        {
+            player.waitBeforeCheckGround(1f);
+        }
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
     }
+
+    
 }

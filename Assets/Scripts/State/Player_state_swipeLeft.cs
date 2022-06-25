@@ -47,6 +47,7 @@ public class Player_state_swipeLeft : Player_base_state
             player.pStateMachine.ChangeState(player.stateNoSwipe);
         }
 
+        player.Swipe();
     }
 
     public override void PhysicsUpdate()

@@ -41,9 +41,9 @@ public class Player_state_noSwipe : Player_base_state
         }
         if (player.controlInput.pressUp)
         {
-            //player.pStateMachine.ChangeState(player.)
+            player.controlInput.UsedRightInput();
+            player.pStateMachine.ChangeState(player.stateJump);
         }
-        player.MoveForward();
     }
 
     public override void PhysicsUpdate()

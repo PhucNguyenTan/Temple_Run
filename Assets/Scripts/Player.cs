@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public Player_state_swipeRight stateSwipeR { get; private set; }
     public Player_state_noSwipe stateNoSwipe { get; private set; }
     public Player_state_dealth stateDeath { get; private set; }
+    public Player_state_jump stateJump { get; private set; }
     [SerializeField]
     private Player_data data;
     #endregion
@@ -49,7 +50,8 @@ public class Player : MonoBehaviour
         stateSwipeL = new Player_state_swipeLeft(this, pStateMachine, data, "left");
         stateSwipeR = new Player_state_swipeRight(this, pStateMachine, data, "right");
         stateNoSwipe = new Player_state_noSwipe(this, pStateMachine, data, "neutral");
-        stateDeath = new Player_state_dealth(this, pStateMachine, data, "death"); 
+        stateDeath = new Player_state_dealth(this, pStateMachine, data, "death");
+        stateJump = new Player_state_jump(this, pStateMachine, data, "jump");
 
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
@@ -103,7 +105,6 @@ public class Player : MonoBehaviour
         if (!isPause)
         {
             pStateMachine.currentState.LogicUpdate();
-            MoveForward();
             SetJumpVar();
         }
     }
@@ -111,35 +112,27 @@ public class Player : MonoBehaviour
 
     #region Set functions
       
-    public void MoveForward()
+    public void Swipe()
     {
-        /*
-        h_current = Mathf.Lerp(h_current, currentLane, data.SwipeSpeed * Time.deltaTime);
+        h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed*Time.deltaTime);
+        Vector3 move = new Vector3();
+        move.y = data.groundGravity;
+        move.x = h_current - transform.position.x;
+        move.z = 0.0f;
+        control.Move(move);
+    }
+
+    public void Jump()
+    {
         Vector3 move = new Vector3();
         
-        move.y += gravity * Time.deltaTime;
-        v_current = move.y;
-        move.x = h_current - transform.position.x;
-        move.z = data.forwardSpeed * Time.deltaTime;
-        //control.Move(move);
-        Debug.Log("h_current :" + h_current + " Lane: "+currentLane);
-        */
-
-        h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed*Time.deltaTime);
-        //Debug.Log(h_current);
-        Vector3 move = new Vector3();
-
-        move.y += gravity * Time.deltaTime;
-        v_current = move.y;
-        move.x = h_current - transform.position.x;
-        move.z = 0.0f;//data.forwardSpeed * Time.deltaTime;
-        control.Move(move);
-
-
-        //h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed * Time.deltaTime);
-
-
+        v_current -= data.gravity * Time.deltaTime;
+        move.y = v_current;
+        move.x = h_current;
+        move.z = 0.0f;
     }
+
+
 
     public void AddJumpForce()
     {
@@ -204,10 +197,25 @@ public class Player : MonoBehaviour
 
         else if (other.CompareTag("redbox_dare"))
         {
-
+            
         }
 
 
     }
     #endregion
+
+    private IEnumerator waitBeforeCheckGrounded(float timeToWait)
+    {
+        yield return new WaitForSeconds(timeToWait);
+        if (control.isGrounded)
+        {
+            pStateMachine.ChangeState(stateNoSwipe);
+        }
+    }
+
+    public void waitBeforeCheckGround(float timeToWait)
+    {
+        StartCoroutine(waitBeforeCheckGrounded(timeToWait));
+    }
+
 }
