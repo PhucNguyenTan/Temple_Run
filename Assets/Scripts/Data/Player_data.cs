@@ -8,7 +8,7 @@ public class Player_data : ScriptableObject
     public float SwipeSpeed = 1f;
     public Vector3 _goalPosition = new Vector3(1f, 1f, 1f);
 
-    public Vector3[] test;
+    public float health;
 
     public float forwardSpeed;
 

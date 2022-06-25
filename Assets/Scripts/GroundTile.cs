@@ -56,8 +56,5 @@ public class GroundTile : MonoBehaviour
         isPause = false;
     }
 
-    public void SelfDestruct()
-    {
-        Destroy(this);
-    }
+    
 }

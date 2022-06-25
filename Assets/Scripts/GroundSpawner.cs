@@ -11,6 +11,8 @@ public class GroundSpawner : MonoBehaviour
     //private GameObject[10] currentGrounds;
     //public GameObject[] arrayGround;
 
+    private int groundCount;
+
     
     private List<GroundTile> listGround = new List<GroundTile>();
     public bool isPause { get; private set; } = false;
@@ -43,8 +45,8 @@ public class GroundSpawner : MonoBehaviour
         switch (state)
         {
             case GameManager.GameState.CountDown:
-                PauseScrolling();
                 Initialize();
+                PauseScrolling();
                 break;
             case GameManager.GameState.Pause:
                 PauseScrolling();
@@ -81,6 +83,8 @@ public class GroundSpawner : MonoBehaviour
         for (int i = 0; i < tileLimit; i++)
         {
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
+            currentGround.name = "Ground_" + groundCount;
+            groundCount++;
             listGround.Add(currentGround);
             nextSpawnPoint = currentGround.transform.Find("SpawnPoint").transform.position; 
         }
@@ -93,6 +97,8 @@ public class GroundSpawner : MonoBehaviour
             int currentListLength = listGround.Count;
             nextSpawnPoint = listGround[currentListLength - 1].transform.GetChild(0).transform.position;
             currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
+            currentGround.name = "Ground_" + groundCount;
+            groundCount++;
             currentGround.UnPause();
             listGround.Add(currentGround);
             nextSpawnPoint = currentGround.transform.GetChild(0).transform.position;
@@ -119,11 +125,12 @@ public class GroundSpawner : MonoBehaviour
     {
         for (int i = 0; i<listGround.Count; i++)
         {
-            Debug.Log($"{listGround[i]}");
-            Destroy(listGround[i]);
+            Debug.Log($"{listGround[i].name} was destroyed");
+            Destroy(listGround[i].gameObject);
         }
         listGround.Clear();
         nextSpawnPoint = Vector3.zero;
+        groundCount = 0;
         CreateStartingGrounds();
     }
 }

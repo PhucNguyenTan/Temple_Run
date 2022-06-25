@@ -34,12 +34,14 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Health and score
-    public float health { get; private set; } = 50f;
+    public float health { get; private set; }
     public int score { get; private set; } = 0;
     #endregion
 
     [SerializeField]
     private IGMUI ingameUI;
+
+    private bool redDare_touched = false;
 
     private void Awake()
     {
@@ -73,10 +75,10 @@ public class Player : MonoBehaviour
             case GameManager.GameState.CountDown:
                 InitializePlayer();
                 isPause = true;
-                ingameUI.SetHealthValue(health);
                 break;
             case GameManager.GameState.Run:
                 isPause = false;
+                pStateMachine.Initialize(stateNoSwipe);
                 break;
             case GameManager.GameState.Pause:
                 isPause = true;
@@ -183,10 +185,29 @@ public class Player : MonoBehaviour
 
     public void InitializePlayer()
     {
-        health = 50f;
-        pStateMachine.ChangeState(stateNoSwipe);
+        health = data.health;
+        ingameUI.SetHealthValue(health);
+        //pStateMachine.ChangeState(stateNoSwipe); Should probably check why this doesn't work
         transform.position = new Vector3(0f, 0.432f, 0f);
+        currentLane = data.laneMid;
     }
 
-    
+    #region Other Object collision
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.CompareTag("redbox"))
+        {
+            Destroy(other.gameObject);
+            TakeDamage();
+        }
+
+        else if (other.CompareTag("redbox_dare"))
+        {
+
+        }
+
+
+    }
+    #endregion
 }
