@@ -15,16 +15,12 @@ MonoBehaviour:
   SwipeRange: 1
   SwipeSpeed: 1
   _goalPosition: {x: 0.1, y: 0, z: 0}
-  test:
-  - {x: 0.1, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: -0.1, y: 0, z: 0}
+  health: 50
   forwardSpeed: 1
   gravity: -9.8
+  groundGravity: -0.5
   maxJumpTime: 10
   maxJumpHeight: 10
   laneMid: 0
   laneLeft: -0.25
   laneRight: 0.25
-  level1Up: 0.5
-  level2Up: 2
