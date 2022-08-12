@@ -118,7 +118,6 @@ public class Player : MonoBehaviour
         Vector3 move = new Vector3();
         move.y = data.groundGravity;
         move.x = h_current - transform.position.x;
-        move.z = 0.0f;
         control.Move(move);
     }
 
@@ -129,7 +128,6 @@ public class Player : MonoBehaviour
         v_current -= data.gravity * Time.deltaTime;
         move.y = v_current;
         move.x = h_current;
-        move.z = 0.0f;
     }
 
 

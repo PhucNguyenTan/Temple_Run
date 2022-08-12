@@ -41,7 +41,7 @@ public class Player_state_noSwipe : Player_base_state
         }
         if (player.controlInput.pressUp)
         {
-            player.controlInput.UsedRightInput();
+            player.controlInput.UsedUpInput();
             player.pStateMachine.ChangeState(player.stateJump);
         }
     }
