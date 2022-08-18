@@ -5,71 +5,27 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField]
-    private PlayerAction input;
-    public bool pressLeft = false;
-    public bool pressRight = false;
-    public bool pressUp = false;
-    public bool pressDown = false;
-    public bool pressPause = false;
-
-    public void LeftInput(InputAction.CallbackContext context)
+    public static InputHandler Instance;
+    public PlayerAction Input;
+    private void Awake()
     {
-        if (context.started)
+        Input = new PlayerAction();
+        if (Instance == null)
         {
-            pressLeft = true;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
+        else
+            Destroy(gameObject);
     }
 
-    public void RightInput(InputAction.CallbackContext context)
+    private void OnEnable()
     {
-        if (context.started)
-        {
-            pressRight = true;
-        }
+        Input.Player.Enable();
     }
 
-    public void UpInput(InputAction.CallbackContext context)
+    private void OnDisable()
     {
-        if (context.started)
-        {
-            pressUp = true;
-        }
-    }
-
-    public void DownInput(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            pressDown = true;
-        }
-    }
-
-    public void PauseInput(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            pressPause = true;
-        }
-    }
-
-    public void UsedLeftInput()
-    {
-        pressLeft = false;
-    }
-
-    public void UsedRightInput()
-    {
-        pressRight = false;
-    }
-
-    public void UsedUpInput()
-    {
-        pressUp = false;
-    }
-
-    public void UsedPause()
-    {
-        pressPause = false;
+        Input.Player.Disable();
     }
 }

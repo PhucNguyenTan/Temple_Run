@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
     public Player_state_noSwipe stateNoSwipe { get; private set; }
     public Player_state_dealth stateDeath { get; private set; }
     public Player_state_jump stateJump { get; private set; }
+    public Player_state_swipe stateSwiping { get; private set; }
     [SerializeField]
     private Player_data data;
     #endregion
@@ -28,8 +30,8 @@ public class Player : MonoBehaviour
     private float v_current = 0f;
     private float initialJumpVelocity = 0f;
     private float gravity;
-    public float currentLane { get; private set; }
-    public float prevLane { get; private set; }
+    public float CurrentLane { get; private set; }
+    public float PrevLane { get; private set; }
 
     public bool isPause { get; private set; } = true;
     #endregion
@@ -39,8 +41,12 @@ public class Player : MonoBehaviour
     public int score { get; private set; } = 0;
     #endregion
 
-    [SerializeField]
-    private IGMUI ingameUI;
+
+    [SerializeField] float _timeToSwipe;
+    [SerializeField] IGMUI ingameUI;
+    [SerializeField] float _offset;
+    public float StartSwipePoint { get; private set; }
+    public float SwipeTimer;
 
     private bool redDare_touched = false;
 
@@ -52,18 +58,17 @@ public class Player : MonoBehaviour
         stateNoSwipe = new Player_state_noSwipe(this, pStateMachine, data, "neutral");
         stateDeath = new Player_state_dealth(this, pStateMachine, data, "death");
         stateJump = new Player_state_jump(this, pStateMachine, data, "jump");
+        stateSwiping = new Player_state_swipe(this, pStateMachine, data, "swipe");
 
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
         controlInput = GetComponent<InputHandler>();
         gravity = data.gravity;
 
-        GameManager.OnStateChange += GameManagerOnStateChanged;
-
-
         SetJumpVar();
 
     }
+
 
     private void OnDestroy()
     {
@@ -72,7 +77,7 @@ public class Player : MonoBehaviour
 
     private void GameManagerOnStateChanged(GameManager.GameState state)
     {
-        switch (state)
+        switch (state)  
         {
             case GameManager.GameState.CountDown:
                 InitializePlayer();
@@ -98,6 +103,11 @@ public class Player : MonoBehaviour
     void Start()
     {
         pStateMachine.Initialize(stateNoSwipe);
+        InputHandler.Instance.Input.Player.Left.performed += PlayerMoveLeft;
+        InputHandler.Instance.Input.Player.Right.performed += PlayerMoveRight;
+        InputHandler.Instance.Input.Player.Up.performed += PlayerJump;
+        InputHandler.Instance.Input.Player.Down.performed += PlayerRoll;
+        GameManager.OnStateChange += GameManagerOnStateChanged;
     }
 
     void Update()
@@ -105,21 +115,25 @@ public class Player : MonoBehaviour
         if (!isPause)
         {
             pStateMachine.currentState.LogicUpdate();
-            SetJumpVar();
+            PlayerUpdate();
         }
     }
 
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        InputHandler.Instance.Input.Player.Left.performed -= PlayerMoveLeft;
+        InputHandler.Instance.Input.Player.Right.performed -= PlayerMoveRight;
+        InputHandler.Instance.Input.Player.Up.performed -= PlayerJump;
+        InputHandler.Instance.Input.Player.Down.performed -= PlayerRoll;
+        GameManager.OnStateChange -= GameManagerOnStateChanged;
+    }
 
     #region Set functions
-      
-    public void Swipe()
-    {
-        h_current = Mathf.MoveTowards(h_current, currentLane, data.SwipeSpeed*Time.deltaTime);
-        Vector3 move = new Vector3();
-        move.y = data.groundGravity;
-        move.x = h_current - transform.position.x;
-        control.Move(move);
-    }
 
     public void Jump()
     {
@@ -130,12 +144,58 @@ public class Player : MonoBehaviour
         move.x = h_current;
     }
 
+    void PlayerUpdate()
+    {
+        AddGravity();
+        Vector3 move = new Vector3();
+        move.y = 0f;
+        move.x = h_current;
+        MoveToTarget(move);
+    }
 
+    public void EndSwipe()
+    {
+        SwipeTimer = 0f;
+    }
+
+    void MoveToTarget(Vector3 target)
+    {
+
+        var test = target - transform.position;
+        test.y = v_current;
+        //Debug.Log(test);1
+        control.Move(test);
+    }
+
+    public void Swiping()
+    {
+        SwipeTimer += data.SwipeSpeed * Time.deltaTime;
+        float timerRatio = SwipeTimer / data.SwipeDuration;
+        if (timerRatio > 1f)
+            timerRatio = 1f;
+        h_current = Mathf.Lerp(PrevLane, CurrentLane, timerRatio);
+        //Debug.Log(h_current);
+    }
+
+    public bool CheckIsSwiping()
+    {
+        float test = Mathf.Abs(CurrentLane - transform.position.x);
+        Debug.Log(test);
+        if (test > _offset)
+            return true;
+        return false;
+    }
+
+    public void AddGravity()
+    {
+        v_current = v_current > data.gravity ? data.gravity : v_current + gravity;
+    }
 
     public void AddJumpForce()
     {
         v_current = initialJumpVelocity;
     }
+    #endregion
 
     public void SetJumpVar()
     {
@@ -144,23 +204,45 @@ public class Player : MonoBehaviour
         initialJumpVelocity = (2 * data.maxJumpHeight) / timeToApex;
     }
 
-    public void SetLandLeft() {
-        currentLane = data.laneLeft; 
-    }
-    public void SetLandRight()
+    
+
+    #region Subscriber functions
+    public void PlayerRoll(InputAction.CallbackContext obj)
     {
-        currentLane = data.laneRight; 
+
     }
-    public void SetLandMid()
+
+    public void PlayerJump(InputAction.CallbackContext obj)
     {
-        currentLane = data.laneMid; 
+        SetJumpVar();
+        AddJumpForce();
     }
+
+    public void PlayerMoveLeft(InputAction.CallbackContext obj)
+    {
+        PrevLane = CurrentLane;
+        if (CurrentLane == data.laneMid)
+            CurrentLane = data.laneLeft;
+        else if (CurrentLane == data.laneRight)
+            CurrentLane = data.laneMid;
+    }
+
+    public void PlayerMoveRight(InputAction.CallbackContext obj)
+    {
+        PrevLane = CurrentLane;
+        if (CurrentLane == data.laneMid)
+            CurrentLane = data.laneRight;
+        else if (CurrentLane == data.laneLeft)
+            CurrentLane = data.laneMid;
+    }
+
+
     #endregion
 
     #region Check functions
-    public bool DoneSwiping()
+    public bool CheckIfDoneSwiping()
     {
-        return h_current == currentLane;
+        return h_current == CurrentLane;
     }
     #endregion
 
@@ -180,7 +262,7 @@ public class Player : MonoBehaviour
         ingameUI.SetHealthValue(health);
         //pStateMachine.ChangeState(stateNoSwipe); Should probably check why this doesn't work
         transform.position = new Vector3(0f, 0.432f, 0f);
-        currentLane = data.laneMid;
+        CurrentLane = data.laneMid;
     }
 
     #region Other Object collision

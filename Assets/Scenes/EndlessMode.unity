@@ -215,11 +215,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2137788858}
     - target: {fileID: 7111162291827252655, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
+      propertyPath: _offset
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111162291827252655, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
       propertyPath: ingameUI
       value: 
       objectReference: {fileID: 2137788860}
     m_RemovedComponents:
     - {fileID: 7671218204717236184, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
+    - {fileID: 7111162291827252653, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
+    - {fileID: 7111162291827252654, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5b36055b3a21c8a4b945207513ae19af, type: 3}
 --- !u!1 &58686226
 GameObject:
@@ -720,6 +726,100 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 325737035}
   m_CullTransparentMesh: 1
+--- !u!1 &415185352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 415185355}
+  - component: {fileID: 415185354}
+  - component: {fileID: 415185353}
+  m_Layer: 0
+  m_Name: InputHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &415185353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415185352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8966d4f45a13677439f3640c2d16fdb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &415185354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415185352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 148c342b867bd4147933698fbeef1e4a, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4b83c64f-a2ff-4249-b146-806cd6326df2
+    m_ActionName: Player/Left[/Keyboard/a]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 45909ea0-c4fe-41da-8e97-95b427b5bda2
+    m_ActionName: Player/Right[/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bfbe7610-3813-4512-8783-8725c73ac08a
+    m_ActionName: Player/Up[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 166bd301-7e3b-43e0-a822-fd6df7a03496
+    m_ActionName: Player/Down[/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b993f3fa-bc33-4e76-9f9f-11b6a751a351
+    m_ActionName: Player/Pause[/Keyboard/escape]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!4 &415185355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415185352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &447465956
 GameObject:
   m_ObjectHideFlags: 0
@@ -2746,7 +2846,6 @@ GameObject:
   - component: {fileID: 2137788856}
   - component: {fileID: 2137788860}
   - component: {fileID: 2137788861}
-  - component: {fileID: 2137788862}
   m_Layer: 5
   m_Name: IGMUI
   m_TagString: Untagged
@@ -2919,23 +3018,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2137788862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2137788855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8966d4f45a13677439f3640c2d16fdb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pressLeft: 0
-  pressRight: 0
-  pressUp: 0
-  pressDown: 0
-  pressPause: 0
 --- !u!1001 &6128858170090292939
 PrefabInstance:
   m_ObjectHideFlags: 0

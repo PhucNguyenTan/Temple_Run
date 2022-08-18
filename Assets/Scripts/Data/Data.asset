@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad6ac3622cb0dee42b27192e98e8f9c7, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  SwipeRange: 1
+  SwipeDuration: 0.5
   SwipeSpeed: 1
-  _goalPosition: {x: 0.1, y: 0, z: 0}
-  health: 50
-  forwardSpeed: 1
-  gravity: -9.8
-  groundGravity: -0.5
   maxJumpTime: 10
   maxJumpHeight: 10
   laneMid: 0
   laneLeft: -0.25
   laneRight: 0.25
+  health: 50
+  forwardSpeed: 1
+  gravity: -9.8
+  groundGravity: -0.5
+  IsShowStatesName: 1

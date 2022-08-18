@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+using System.Threading.Tasks;
 
 public class IGMUI : MonoBehaviour
 {
@@ -53,7 +55,8 @@ public class IGMUI : MonoBehaviour
         {
             case GameManager.GameState.CountDown:
                 InitializeIGMUI();
-                StartCoroutine(CountingDown());
+                //StartCoroutine(CountingDown());
+                TestAsync();
                 break;
             case GameManager.GameState.Pause:
                 break;
@@ -76,8 +79,19 @@ public class IGMUI : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        InputHandler.Instance.Input.Player.Pause.performed += HandlePressingPause;
+    }
+
+    private void OnDisable()
+    {
+        InputHandler.Instance.Input.Player.Pause.performed -= HandlePressingPause;
+
+    }
+
     #region IGM
-    public void HandlePressingPause()
+    public void HandlePressingPause(InputAction.CallbackContext obj)
     {
         
             if (isPause)
@@ -88,7 +102,6 @@ public class IGMUI : MonoBehaviour
             {
                 Pause();
             }
-            controlInput.UsedPause();
         
     }
 
@@ -124,6 +137,24 @@ public class IGMUI : MonoBehaviour
 
         displayText.text = "GO!";
         yield return new WaitForSeconds(1f);
+        countDownText.SetActive(false);
+        GameManager.UpdateGameState(GameManager.GameState.Run);
+    }
+
+    private async void TestAsync()
+    {
+        while (CountDownDisplay > 0)
+        {
+            displayText.text = CountDownDisplay.ToString();
+            await Task.Delay(1000);
+            //yield return new WaitForSeconds(1f);
+
+            CountDownDisplay--;
+        }
+
+        displayText.text = "GO!";
+        //yield return new WaitForSeconds(1f);
+        await Task.Delay(1000);
         countDownText.SetActive(false);
         GameManager.UpdateGameState(GameManager.GameState.Run);
     }

@@ -11,7 +11,7 @@ public class Player_base_state
     protected Player_data data;
     protected bool startSwipe = false;
 
-    public Player_base_state(Player player, Player_state_machine state_Machine, Player_data data, string animName)
+    public Player_base_state(Player player, Player_state_machine stateMachine, Player_data data, string animName)
     {
         this.player = player;
         this.stateMachine = stateMachine;
@@ -21,7 +21,8 @@ public class Player_base_state
 
     public virtual void Enter()
     {
-        //Debug.Log(animName);
+        if(data.IsShowStatesName)
+        Debug.Log(animName);
     }
 
     public virtual void Exit()

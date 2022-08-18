@@ -7,7 +7,7 @@ public class Player_state_swipeLeft : Player_base_state
     
 
 
-    public Player_state_swipeLeft(Player player, Player_state_machine state_Machine, Player_data data, string animName) : base(player, state_Machine, data, animName)
+    public Player_state_swipeLeft(Player player, Player_state_machine stateMachine, Player_data data, string animName) : base(player, stateMachine, data, animName)
     {
     }
 
@@ -25,29 +25,6 @@ public class Player_state_swipeLeft : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        
-
-        if (!startSwipe)
-        {
-            startSwipe = true;
-            if (player.currentLane == data.laneRight)
-            {
-                player.SetLandMid();
-            }
-            else if (player.currentLane == data.laneMid)
-            {
-                player.SetLandLeft();
-            }
-        }
-
-        if (player.DoneSwiping())
-        {
-            startSwipe = false;
-            player.pStateMachine.ChangeState(player.stateNoSwipe);
-        }
-
-        player.Swipe();
     }
 
     public override void PhysicsUpdate()
