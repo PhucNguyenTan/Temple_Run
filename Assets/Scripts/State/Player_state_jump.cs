@@ -12,24 +12,34 @@ public class Player_state_jump : Player_base_state
     public override void Enter()
     {
         base.Enter();
+        player.ApplyGravity();
+        InputHandler.Instance.Input.Player.Up.performed -= player.PlayerJump;
     }
 
     public override void Exit()
     {
         base.Exit();
+        player.UnapplyGravity();
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (!jumped)
+        if (player.IsGrounded())
         {
-            player.AddJumpForce();
+            if(player.IsSwiping())
+                stateMachine.ChangeState(player.stateSwiping);
+            else
+                stateMachine.ChangeState(player.stateNoSwipe);
+
         }
         else
         {
-            player.waitBeforeCheckGround(1f);
+            if (player.IsSwiping())
+                stateMachine.ChangeState(player.stateSwiping); // Air Swipe
         }
+        player.AddGravity();
+        player.MoveToTarget();
     }
 
     public override void PhysicsUpdate()

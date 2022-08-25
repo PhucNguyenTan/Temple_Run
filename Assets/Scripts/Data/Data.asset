@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: Data
   m_EditorClassIdentifier: 
   SwipeDuration: 0.5
-  SwipeSpeed: 1
-  maxJumpTime: 10
-  maxJumpHeight: 10
+  SwipeSpeed: 1.5
+  maxJumpTime: 1
+  maxJumpHeight: 0.001
   laneMid: 0
   laneLeft: -0.25
   laneRight: 0.25
+  Standable:
+    serializedVersion: 2
+    m_Bits: 64
+  GroudY: 1
+  GroundDectectHeight: 0.1
   health: 50
   forwardSpeed: 1
-  gravity: -9.8
-  groundGravity: -0.5
+  Gravity: -9.8
+  GroundGravity: -0.5
   IsShowStatesName: 1

@@ -11,7 +11,7 @@ public class Player_state_noSwipe : Player_base_state
     public override void Enter()
     {
         base.Enter();
-
+        InputHandler.Instance.Input.Player.Up.performed += player.PlayerJump;
         InputHandler.Instance.Input.Player.Left.performed += player.PlayerMoveLeft;
         InputHandler.Instance.Input.Player.Right.performed += player.PlayerMoveRight;
     }
@@ -24,9 +24,13 @@ public class Player_state_noSwipe : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (player.CheckIsSwiping())
+        if (player.IsSwiping())
         {
             stateMachine.ChangeState(player.stateSwiping);
+        }
+        if (!player.IsGrounded())
+        {
+            stateMachine.ChangeState(player.stateJump);
         }
     }
 

@@ -5,30 +5,38 @@ using UnityEngine;
 public class GroundTile : MonoBehaviour
 {
     GroundSpawner groundSpawner;
-    [SerializeField]
-    GameObject obstacle;
-    [SerializeField]
-    Player_data data;
-    float[] h_positions = new float[3];
-    private bool isPause = true;
+    [SerializeField] GameObject _obstacle;
+    [SerializeField] Player_data _data;
+    [SerializeField] bool _generateObstacle;
+    float[] _h_positions = new float[3];
+    bool _isPause = true;
 
     private void OnTriggerExit(Collider other)
     {
-        groundSpawner.RemoveLastInList();
-        //groundSpawner.SpawnGround();
-        Destroy(gameObject, 2f); // Destroy object after 2 second
+        if(other.transform.gameObject.layer == 8)
+        {
+            groundSpawner.RemoveLastInList();
+            //groundSpawner.SpawnGround();
+            Destroy(gameObject, 2f); // Destroy object after 2 second
+
+        }
     }
 
     private void Start()
     {
         groundSpawner = GameObject.FindObjectOfType<GroundSpawner>();
-        h_positions = new float[] {data.laneLeft, data.laneMid, data.laneRight};
-        SpawnObstacle();
+        if (_generateObstacle)
+        {
+            _h_positions = new float[] {_data.laneLeft, _data.laneMid, _data.laneRight};
+            SpawnObstacle();
+
+        }
+
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (!isPause)
+        if (!_isPause)
         {
             Scrolling();
         }
@@ -36,9 +44,9 @@ public class GroundTile : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        int random_Lane = Random.Range(0, h_positions.Length);
-        Vector3 pointSpawnObstacle = new Vector3(h_positions[random_Lane], transform.position.y + 0.1f,transform.position.z+0.3f);
-        Instantiate(obstacle, pointSpawnObstacle, Quaternion.identity, transform);
+        int random_Lane = Random.Range(0, _h_positions.Length);
+        Vector3 pointSpawnObstacle = new Vector3(_h_positions[random_Lane], transform.position.y + 0.1f,transform.position.z+0.3f);
+        Instantiate(_obstacle, pointSpawnObstacle, Quaternion.identity, transform);
     }
 
     private void Scrolling()
@@ -48,12 +56,12 @@ public class GroundTile : MonoBehaviour
 
     public void Pause()
     {
-        isPause = true;
+        _isPause = true;
     }
 
     public void UnPause()
     {
-        isPause = false;
+        _isPause = false;
     }
 
     

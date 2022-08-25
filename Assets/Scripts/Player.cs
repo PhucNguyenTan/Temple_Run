@@ -26,30 +26,34 @@ public class Player : MonoBehaviour
 
     #region undefined variables
 
-    private float h_current = 0f;
-    private float v_current = 0f;
-    private float initialJumpVelocity = 0f;
-    private float gravity;
+    float _h_current = 0f;
+    float _v_current = 0f;
+    float _initialJumpVelocity;
+    float _gravity;
+    Vector3 _bottomContact;
+
     public float CurrentLane { get; private set; }
     public float PrevLane { get; private set; }
-
     public bool isPause { get; private set; } = true;
     #endregion
-
     #region Health and score
     public float health { get; private set; }
     public int score { get; private set; } = 0;
+    public bool CanCheckGrounded { get; private set; }
+    public bool IsApplyGravity { get; private set; }
     #endregion
 
 
     [SerializeField] float _timeToSwipe;
     [SerializeField] IGMUI ingameUI;
-    [SerializeField] float _offset;
     public float StartSwipePoint { get; private set; }
     public float SwipeTimer;
 
-    private bool redDare_touched = false;
 
+    private bool redDare_touched = false;
+    float _y_StableGroudn;
+
+    float _v_force;
     private void Awake()
     {
         pStateMachine = new Player_state_machine();
@@ -63,8 +67,7 @@ public class Player : MonoBehaviour
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
         controlInput = GetComponent<InputHandler>();
-        gravity = data.gravity;
-
+        CanCheckGrounded = true;
         SetJumpVar();
 
     }
@@ -115,7 +118,6 @@ public class Player : MonoBehaviour
         if (!isPause)
         {
             pStateMachine.currentState.LogicUpdate();
-            PlayerUpdate();
         }
     }
 
@@ -135,36 +137,34 @@ public class Player : MonoBehaviour
 
     #region Set functions
 
-    public void Jump()
+    //public void SetGrounded()
+    //{
+    //    _v_current = data.GroudY;
+    //}
+    public void MoveToTarget()
     {
         Vector3 move = new Vector3();
-        
-        v_current -= data.gravity * Time.deltaTime;
-        move.y = v_current;
-        move.x = h_current;
+        move.y = _v_current;
+        move.x = _h_current;
+        transform.position = move;
     }
 
-    void PlayerUpdate()
+    public bool IsGrounded()
     {
-        AddGravity();
-        Vector3 move = new Vector3();
-        move.y = 0f;
-        move.x = h_current;
-        MoveToTarget(move);
-    }
+        if (!CanCheckGrounded) return false;
+        RaycastHit hit;
+        Vector3 test = -transform.up * data.GroundDectectHeight;
+        bool castTouch = Physics.Raycast(transform.position, -transform.up, out hit, 10 ,data.Standable);
 
-    public void EndSwipe()
-    {
-        SwipeTimer = 0f;
-    }
+        if (!castTouch)
+            return false;
 
-    void MoveToTarget(Vector3 target)
-    {
-
-        var test = target - transform.position;
-        test.y = v_current;
-        //Debug.Log(test);1
-        control.Move(test);
+        _y_StableGroudn = hit.point.y + data.GroundDectectHeight;
+        if (hit.distance <= data.GroundDectectHeight)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void Swiping()
@@ -173,35 +173,48 @@ public class Player : MonoBehaviour
         float timerRatio = SwipeTimer / data.SwipeDuration;
         if (timerRatio > 1f)
             timerRatio = 1f;
-        h_current = Mathf.Lerp(PrevLane, CurrentLane, timerRatio);
-        //Debug.Log(h_current);
+        _h_current = Mathf.Lerp(PrevLane, CurrentLane, timerRatio);
     }
-
-    public bool CheckIsSwiping()
+    public bool IsSwiping()
     {
-        float test = Mathf.Abs(CurrentLane - transform.position.x);
-        Debug.Log(test);
-        if (test > _offset)
+        if (transform.position.x != CurrentLane)
             return true;
         return false;
     }
 
+
+    public void EndSwipe()
+    {
+        SwipeTimer = 0f;
+    }
+
+    public void ApplyGravity() { IsApplyGravity = true; }
+    public void UnapplyGravity() { IsApplyGravity = false; }
+
+
     public void AddGravity()
     {
-        v_current = v_current > data.gravity ? data.gravity : v_current + gravity;
+        _v_force += _gravity  * Time.deltaTime;
+        _v_force = Mathf.Max(data.Gravity, _v_force);
+        _v_current = transform.position.y + _v_force;
+        if (_v_current < _y_StableGroudn)
+        {
+            _v_current = _y_StableGroudn;
+            UnapplyGravity();
+        }
     }
 
     public void AddJumpForce()
     {
-        v_current = initialJumpVelocity;
+        _v_force = _initialJumpVelocity;
     }
     #endregion
 
     public void SetJumpVar()
     {
         float timeToApex = data.maxJumpTime / 2;
-        gravity = (-2 * data.maxJumpHeight) / timeToApex*timeToApex;
-        initialJumpVelocity = (2 * data.maxJumpHeight) / timeToApex;
+        _gravity = (-2 * data.maxJumpHeight) / (timeToApex*timeToApex);
+        _initialJumpVelocity = (2 * data.maxJumpHeight) / timeToApex;
     }
 
     
@@ -214,6 +227,7 @@ public class Player : MonoBehaviour
 
     public void PlayerJump(InputAction.CallbackContext obj)
     {
+        waitBeforeCheckGround(0.1f);
         SetJumpVar();
         AddJumpForce();
     }
@@ -242,7 +256,7 @@ public class Player : MonoBehaviour
     #region Check functions
     public bool CheckIfDoneSwiping()
     {
-        return h_current == CurrentLane;
+        return _h_current == CurrentLane;
     }
     #endregion
 
@@ -284,18 +298,16 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    private IEnumerator waitBeforeCheckGrounded(float timeToWait)
+    private IEnumerator Wait(float timeToWait)
     {
+        CanCheckGrounded = false;
         yield return new WaitForSeconds(timeToWait);
-        if (control.isGrounded)
-        {
-            pStateMachine.ChangeState(stateNoSwipe);
-        }
+        CanCheckGrounded = true;
     }
 
     public void waitBeforeCheckGround(float timeToWait)
     {
-        StartCoroutine(waitBeforeCheckGrounded(timeToWait));
+        StartCoroutine(Wait(timeToWait));
     }
 
 }
