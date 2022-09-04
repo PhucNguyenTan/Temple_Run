@@ -26,6 +26,13 @@ public class Player_data : ScriptableObject
     public float Gravity = -9.8f;
     public float GroundGravity = -0.5f;
 
+    [Header("Sound")]
+    public AudioClip[] JumpAudio;
+    public AudioClip[] LandAudio;
+    public AudioClip[] SwipeAudio;
+    //public AudioClip[] RollAudio;
+    public AudioClip[] CollidingAudio;
+
     [Header("Debug")]
     public bool IsShowStatesName;
 

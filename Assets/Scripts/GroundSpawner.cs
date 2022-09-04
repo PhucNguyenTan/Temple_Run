@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class GroundSpawner : MonoBehaviour
 {
-    public GroundTile groundTile;
-    public Vector3 nextSpawnPoint = Vector3.zero;
-    public int tileLimit = 5;
-    private GroundTile currentGround;
+    [SerializeField] GroundTile _groundTile;
+    [SerializeField] Vector3 _nextSpawnPoint = Vector3.zero;
+    [SerializeField] int _tileLimit = 10;
     //private GameObject[10] currentGrounds;
     //public GameObject[] arrayGround;
 
-    private int groundCount;
-
+    GroundTile _currentGround;
+    int _groundCount;
+    int _currentLevel = 0;
+    int _lastLevel = 0;
+    int _incremetal = 10;
+    float _groundSpeed = 2.0f;
     
     private List<GroundTile> listGround = new List<GroundTile>();
     public bool isPause { get; private set; } = false;
@@ -69,9 +72,17 @@ public class GroundSpawner : MonoBehaviour
 
     private void Update()
     {
-        if(!isPause)
+        if (!isPause)
+        {
             CreateNextGround();
-
+            if (_lastLevel < _currentLevel)
+            {
+                _lastLevel = _currentLevel;
+                _groundSpeed += 1f;
+                SpeedUp();
+            }
+        }
+        
     }
 
     public void RemoveLastInList()
@@ -80,28 +91,34 @@ public class GroundSpawner : MonoBehaviour
     }
 
     public void CreateStartingGrounds() {
-        for (int i = 0; i < tileLimit; i++)
+        for (int i = 0; i < _tileLimit; i++)
         {
-            currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
-            currentGround.name = "Ground_" + groundCount;
-            groundCount++;
-            listGround.Add(currentGround);
-            nextSpawnPoint = currentGround.transform.Find("SpawnPoint").transform.position; 
+            _currentGround = CreateNewGround();
+            if (i == 0) 
+                _currentGround.NoObstacle();
+            listGround.Add(_currentGround);
         }
+    }
+
+    GroundTile CreateNewGround()
+    {
+        _groundCount++;
+        _currentLevel = _groundCount / _incremetal;
+        GroundTile newGround = Instantiate(_groundTile, _nextSpawnPoint, Quaternion.identity);
+        _nextSpawnPoint = newGround.transform.Find("SpawnPoint").transform.position;
+        newGround.UpdateScrollSpeed(_groundSpeed);
+        return newGround;
     }
 
     public void CreateNextGround()
     {
-        if (listGround.Count < tileLimit)
+        if (listGround.Count < _tileLimit)
         {
-            int currentListLength = listGround.Count;
-            nextSpawnPoint = listGround[currentListLength - 1].transform.GetChild(0).transform.position;
-            currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
-            currentGround.name = "Ground_" + groundCount;
-            groundCount++;
-            currentGround.UnPause();
-            listGround.Add(currentGround);
-            nextSpawnPoint = currentGround.transform.GetChild(0).transform.position;
+            int lastestGround = listGround.Count - 1;
+            _nextSpawnPoint = listGround[lastestGround].transform.Find("SpawnPoint").transform.position;
+            _currentGround = CreateNewGround();
+            _currentGround.UnPause();
+            listGround.Add(_currentGround);
         }
     }
 
@@ -121,6 +138,14 @@ public class GroundSpawner : MonoBehaviour
         }
     }
 
+    public void SpeedUp()
+    {
+        for (int i = 0; i < listGround.Count; i++)
+        {
+            listGround[i].UpdateScrollSpeed(_groundSpeed);
+        }
+    }
+
     public void Initialize()
     {
         for (int i = 0; i<listGround.Count; i++)
@@ -129,8 +154,8 @@ public class GroundSpawner : MonoBehaviour
             Destroy(listGround[i].gameObject);
         }
         listGround.Clear();
-        nextSpawnPoint = Vector3.zero;
-        groundCount = 0;
+        _nextSpawnPoint = Vector3.zero;
+        _groundCount = 0;
         CreateStartingGrounds();
     }
 }

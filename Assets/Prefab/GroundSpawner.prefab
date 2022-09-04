@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4eefd51051a8448b26db9850040660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTile: {fileID: 8655409552633857890, guid: b2215ff24cb78dc4bb0442f74d09dcb2, type: 3}
-  nextSpawnPoint: {x: 0, y: 0, z: 0}
-  tileLimit: 5
+  _groundTile: {fileID: 8655409552633857887, guid: b2215ff24cb78dc4bb0442f74d09dcb2, type: 3}
+  _nextSpawnPoint: {x: 0, y: 0, z: 0}
+  _tileLimit: 10
 --- !u!65 &4151008297816797801
 BoxCollider:
   m_ObjectHideFlags: 0

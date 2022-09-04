@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     #region State machine
@@ -14,13 +14,12 @@ public class Player : MonoBehaviour
     public Player_state_dealth stateDeath { get; private set; }
     public Player_state_jump stateJump { get; private set; }
     public Player_state_swipe stateSwiping { get; private set; }
-    [SerializeField]
-    private Player_data data;
+    public Player_state_airSwipe stateAirSwiping { get; private set; }
+    [SerializeField] Player_data data;
     #endregion
 
     #region Components
-    public InputHandler controlInput { get; private set; }
-    private BoxCollider boxCollider;
+    BoxCollider boxCollider;
     public CharacterController control { get; private set; }
     #endregion
 
@@ -49,6 +48,9 @@ public class Player : MonoBehaviour
     public float StartSwipePoint { get; private set; }
     public float SwipeTimer;
 
+    #region Events
+    public static UnityAction OnObstacleCollided;
+    #endregion
 
     private bool redDare_touched = false;
     float _y_StableGroudn;
@@ -57,16 +59,14 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         pStateMachine = new Player_state_machine();
-        stateSwipeL = new Player_state_swipeLeft(this, pStateMachine, data, "left");
-        stateSwipeR = new Player_state_swipeRight(this, pStateMachine, data, "right");
         stateNoSwipe = new Player_state_noSwipe(this, pStateMachine, data, "neutral");
         stateDeath = new Player_state_dealth(this, pStateMachine, data, "death");
         stateJump = new Player_state_jump(this, pStateMachine, data, "jump");
         stateSwiping = new Player_state_swipe(this, pStateMachine, data, "swipe");
+        stateAirSwiping = new Player_state_airSwipe(this, pStateMachine, data, "airSwipe");
 
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
-        controlInput = GetComponent<InputHandler>();
         CanCheckGrounded = true;
         SetJumpVar();
 
@@ -228,26 +228,38 @@ public class Player : MonoBehaviour
     public void PlayerJump(InputAction.CallbackContext obj)
     {
         waitBeforeCheckGround(0.1f);
+        SoundManager.Instance.PlayEffectRandomOnce(data.JumpAudio);
         SetJumpVar();
         AddJumpForce();
     }
 
     public void PlayerMoveLeft(InputAction.CallbackContext obj)
     {
+        if (CurrentLane == data.laneLeft) return;
+
+        SoundManager.Instance.PlayEffectRandomOnce(data.SwipeAudio);
         PrevLane = CurrentLane;
         if (CurrentLane == data.laneMid)
+        {
             CurrentLane = data.laneLeft;
-        else if (CurrentLane == data.laneRight)
-            CurrentLane = data.laneMid;
+            return;
+        }
+        CurrentLane = data.laneMid;
     }
 
     public void PlayerMoveRight(InputAction.CallbackContext obj)
     {
+        if (CurrentLane == data.laneRight) return;
+
+        SoundManager.Instance.PlayEffectRandomOnce(data.SwipeAudio);
         PrevLane = CurrentLane;
         if (CurrentLane == data.laneMid)
+        {
             CurrentLane = data.laneRight;
-        else if (CurrentLane == data.laneLeft)
-            CurrentLane = data.laneMid;
+            return;
+        }
+
+        CurrentLane = data.laneMid;
     }
 
 
@@ -285,7 +297,9 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("redbox"))
         {
+            OnObstacleCollided?.Invoke();
             Destroy(other.gameObject);
+            SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
             TakeDamage();
         }
 

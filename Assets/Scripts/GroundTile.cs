@@ -7,7 +7,8 @@ public class GroundTile : MonoBehaviour
     GroundSpawner groundSpawner;
     [SerializeField] GameObject _obstacle;
     [SerializeField] Player_data _data;
-    [SerializeField] bool _generateObstacle;
+    [SerializeField] bool _hasObstacle;
+    float _speed = 0f;
     float[] _h_positions = new float[3];
     bool _isPause = true;
 
@@ -16,8 +17,7 @@ public class GroundTile : MonoBehaviour
         if(other.transform.gameObject.layer == 8)
         {
             groundSpawner.RemoveLastInList();
-            //groundSpawner.SpawnGround();
-            Destroy(gameObject, 2f); // Destroy object after 2 second
+            Destroy(gameObject, 1f);
 
         }
     }
@@ -25,7 +25,7 @@ public class GroundTile : MonoBehaviour
     private void Start()
     {
         groundSpawner = GameObject.FindObjectOfType<GroundSpawner>();
-        if (_generateObstacle)
+        if (_hasObstacle)
         {
             _h_positions = new float[] {_data.laneLeft, _data.laneMid, _data.laneRight};
             SpawnObstacle();
@@ -51,7 +51,12 @@ public class GroundTile : MonoBehaviour
 
     private void Scrolling()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 2.0f * Time.deltaTime);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - _speed * Time.deltaTime);
+    }
+
+    public void UpdateScrollSpeed(float newSpeed)
+    {
+        _speed = newSpeed;
     }
 
     public void Pause()
@@ -62,6 +67,11 @@ public class GroundTile : MonoBehaviour
     public void UnPause()
     {
         _isPause = false;
+    }
+
+    public void NoObstacle()
+    {
+        _hasObstacle = false;
     }
 
     

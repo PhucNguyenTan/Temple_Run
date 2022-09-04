@@ -14,6 +14,8 @@ public class Player_state_jump : Player_base_state
         base.Enter();
         player.ApplyGravity();
         InputHandler.Instance.Input.Player.Up.performed -= player.PlayerJump;
+        InputHandler.Instance.Input.Player.Left.performed += player.PlayerMoveLeft;
+        InputHandler.Instance.Input.Player.Right.performed += player.PlayerMoveRight;
     }
 
     public override void Exit()
@@ -25,9 +27,12 @@ public class Player_state_jump : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (player.IsGrounded())
+        bool isGrounded = player.IsGrounded();
+        bool isSwiping = player.IsSwiping();
+        if (isGrounded)
         {
-            if(player.IsSwiping())
+            SoundManager.Instance.PlayEffectRandomOnce(data.LandAudio);
+            if(isSwiping)
                 stateMachine.ChangeState(player.stateSwiping);
             else
                 stateMachine.ChangeState(player.stateNoSwipe);
@@ -35,8 +40,8 @@ public class Player_state_jump : Player_base_state
         }
         else
         {
-            if (player.IsSwiping())
-                stateMachine.ChangeState(player.stateSwiping); // Air Swipe
+            if (isSwiping)
+                stateMachine.ChangeState(player.stateAirSwiping); // Air Swipe
         }
         player.AddGravity();
         player.MoveToTarget();

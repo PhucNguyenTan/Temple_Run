@@ -185,9 +185,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a55cc59f481a33d47867056e3e2c478e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _obstacle: {fileID: 0}
-  _data: {fileID: 0}
-  _generateObstacle: 0
+  _obstacle: {fileID: 6128858171722335374, guid: 03342240351156446985d9cf6084f188, type: 3}
+  _data: {fileID: 11400000, guid: 61ef0a451e3215c488e4f0a6387e6242, type: 2}
+  _hasObstacle: 1
 --- !u!1 &8655409553051229231
 GameObject:
   m_ObjectHideFlags: 0

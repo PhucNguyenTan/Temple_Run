@@ -28,4 +28,22 @@ MonoBehaviour:
   forwardSpeed: 1
   Gravity: -9.8
   GroundGravity: -0.5
+  JumpAudio:
+  - {fileID: 8300000, guid: f8efcbc45432cda4c87c639afc7f5ccb, type: 3}
+  - {fileID: 8300000, guid: e3270d196deea284c974f866a8444efa, type: 3}
+  - {fileID: 8300000, guid: 1de417ae28944b24aa02e3287df52f62, type: 3}
+  LandAudio:
+  - {fileID: 8300000, guid: 050b868636a441445bbf77b5d1ebe1aa, type: 3}
+  - {fileID: 8300000, guid: e38a627227457cf4c844e3ebde807f31, type: 3}
+  - {fileID: 8300000, guid: 0e770b8fecf9c594ebe598147f8277e3, type: 3}
+  - {fileID: 8300000, guid: 3563eaf733be456429787f1638ec43ee, type: 3}
+  SwipeAudio:
+  - {fileID: 8300000, guid: 415165f529f784a44ad6f527c616e5fd, type: 3}
+  - {fileID: 8300000, guid: e72644e859ea51347b15839432ffa3d7, type: 3}
+  - {fileID: 8300000, guid: ffc99b0305c388843bc3da10b94b0021, type: 3}
+  CollidingAudio:
+  - {fileID: 8300000, guid: cd7346fd08f268743b9a13e44e032050, type: 3}
+  - {fileID: 8300000, guid: ec7a63d7f29ba574e9eff3a61b572132, type: 3}
+  - {fileID: 8300000, guid: 4e572468218e4f64180f3e800182fe57, type: 3}
+  - {fileID: 8300000, guid: 987410e4e05b9b84abb490a937b617a4, type: 3}
   IsShowStatesName: 1
