@@ -4,15 +4,19 @@ using UnityEngine.Events;
 
 public class Camera : MonoBehaviour
 {
-    [SerializeField] float xPos;
-    [SerializeField] float yPos;
-    [SerializeField] Player player;
-    [SerializeField] float smoothSpeed;
-    [SerializeField] Vector3 offset;
+    [SerializeField] float _xPos;
+    [SerializeField] float _yPos;
+    [SerializeField] Player _player;
+    [SerializeField] float _smoothSpeed;
+    [SerializeField] Vector3 _offset;
 
+    [SerializeField] float _shakeMagniture;
+    [SerializeField] float _shakeRange;
+    [SerializeField] float _shakeFadeIn;
+    [SerializeField] float _shakeFadeOut;
     private void LateUpdate()
     {
-        Vector3 targetPos = player.transform.position + offset;
+        Vector3 targetPos = _player.transform.position + _offset;
         targetPos.x = 0f;
         targetPos.y = 0.5f;
         transform.position = targetPos;
@@ -30,6 +34,6 @@ public class Camera : MonoBehaviour
 
     public void CameraShake()
     {
-        CameraShaker.Instance.ShakeOnce(3f, 3f, 0.2f, 0.4f);
+        CameraShaker.Instance.ShakeOnce(_shakeMagniture, _shakeRange, _shakeFadeIn, _shakeFadeOut);
     }
 }
