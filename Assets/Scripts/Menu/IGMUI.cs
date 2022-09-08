@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.InputSystem;
 using System.Threading.Tasks;
 
 public class IGMUI : MonoBehaviour
@@ -81,17 +80,17 @@ public class IGMUI : MonoBehaviour
 
     private void OnEnable()
     {
-        InputHandler.Instance.Input.Player.Pause.performed += HandlePressingPause;
+        InputHandler.Instance.Pause.AddListener(HandlePressingPause);
     }
 
     private void OnDisable()
     {
-        InputHandler.Instance.Input.Player.Pause.performed -= HandlePressingPause;
+        InputHandler.Instance.Pause.RemoveListener(HandlePressingPause);
 
     }
 
     #region IGM
-    public void HandlePressingPause(InputAction.CallbackContext obj)
+    public void HandlePressingPause()
     {
         
             if (isPause)

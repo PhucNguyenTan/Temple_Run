@@ -2,7 +2,7 @@ using UnityEngine;
 using EZCameraShake;
 using UnityEngine.Events;
 
-public class Camera : MonoBehaviour
+public class GameCamera : MonoBehaviour
 {
     [SerializeField] float _xPos;
     [SerializeField] float _yPos;
@@ -24,12 +24,12 @@ public class Camera : MonoBehaviour
 
     private void OnEnable()
     {
-        Player.OnObstacleCollided += CameraShake;
+        _player.OnObstacleCollided += CameraShake;
     }
 
     private void OnDisable()
     {
-        Player.OnObstacleCollided -= CameraShake;
+        _player.OnObstacleCollided -= CameraShake;
     }
 
     public void CameraShake()

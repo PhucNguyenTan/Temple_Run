@@ -11,8 +11,7 @@ public class Player_state_airSwipe : Player_base_state
     public override void Enter()
     {
         base.Enter();
-        InputHandler.Instance.Input.Player.Left.performed -= player.PlayerMoveLeft;
-        InputHandler.Instance.Input.Player.Right.performed -= player.PlayerMoveRight;
+        player.LockSwipe();
         player.ApplyGravity();
     }
 

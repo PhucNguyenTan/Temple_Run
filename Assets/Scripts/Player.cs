@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
@@ -42,6 +41,8 @@ public class Player : MonoBehaviour
     public bool IsApplyGravity { get; private set; }
     #endregion
 
+    bool _canJump;
+    bool _canSwipe;
 
     [SerializeField] float _timeToSwipe;
     [SerializeField] IGMUI ingameUI;
@@ -49,7 +50,7 @@ public class Player : MonoBehaviour
     public float SwipeTimer;
 
     #region Events
-    public static UnityAction OnObstacleCollided;
+    public UnityAction OnObstacleCollided;
     #endregion
 
     private bool redDare_touched = false;
@@ -106,11 +107,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         pStateMachine.Initialize(stateNoSwipe);
-        InputHandler.Instance.Input.Player.Left.performed += PlayerMoveLeft;
-        InputHandler.Instance.Input.Player.Right.performed += PlayerMoveRight;
-        InputHandler.Instance.Input.Player.Up.performed += PlayerJump;
-        InputHandler.Instance.Input.Player.Down.performed += PlayerRoll;
-        GameManager.OnStateChange += GameManagerOnStateChanged;
+        SubLeftRight();
+        SubDown();
+        SubUp();
+        GameManager.OnStateChange   += GameManagerOnStateChanged;
     }
 
     void Update()
@@ -128,15 +128,53 @@ public class Player : MonoBehaviour
 
     private void OnDisable()
     {
-        InputHandler.Instance.Input.Player.Left.performed -= PlayerMoveLeft;
-        InputHandler.Instance.Input.Player.Right.performed -= PlayerMoveRight;
-        InputHandler.Instance.Input.Player.Up.performed -= PlayerJump;
-        InputHandler.Instance.Input.Player.Down.performed -= PlayerRoll;
-        GameManager.OnStateChange -= GameManagerOnStateChanged;
+        UnSubLeftRight();
+        UnSubDown();
+        UnSubUp();
+        GameManager.OnStateChange   -= GameManagerOnStateChanged;
     }
 
-    #region Set functions
+    #region Sub wrapper
+    public void UnSubLeftRight()
+    {
+        InputHandler.Instance.Left.RemoveListener(PlayerMoveLeft);
+        InputHandler.Instance.Right.RemoveListener(PlayerMoveRight);
+    }
 
+    public void UnSubUp()
+    {
+        InputHandler.Instance.Up.RemoveListener(PlayerJump);
+    }
+
+    public void UnSubDown()
+    {
+        InputHandler.Instance.Down.RemoveListener(PlayerRoll);
+    }
+
+    public void SubLeftRight()
+    {
+        InputHandler.Instance.Left.AddListener(PlayerMoveLeft);
+        InputHandler.Instance.Right.AddListener(PlayerMoveRight);
+    }
+
+    public void SubUp()
+    {
+        //InputHandler.Instance._input.Player.Up.performed += PlayerJumptest;
+        InputHandler.Instance.Up.AddListener(PlayerJump);
+
+    }
+
+    public void SubDown()
+    {
+        InputHandler.Instance.Down.AddListener(PlayerRoll);
+    }
+    #endregion
+
+    #region Set functions
+    public void LockJump() { _canJump = false; }
+    public void LockSwipe() { _canSwipe = false; }
+    public void UnlockJump() { _canJump = true; }
+    public void UnlockSwipe() { _canSwipe = true; }
     //public void SetGrounded()
     //{
     //    _v_current = data.GroudY;
@@ -220,21 +258,24 @@ public class Player : MonoBehaviour
     
 
     #region Subscriber functions
-    public void PlayerRoll(InputAction.CallbackContext obj)
+    public void PlayerRoll()
     {
 
     }
 
-    public void PlayerJump(InputAction.CallbackContext obj)
+    public void PlayerJump()
     {
+        if (!_canJump) return;
         waitBeforeCheckGround(0.1f);
         SoundManager.Instance.PlayEffectRandomOnce(data.JumpAudio);
         SetJumpVar();
         AddJumpForce();
     }
 
-    public void PlayerMoveLeft(InputAction.CallbackContext obj)
+
+    public void PlayerMoveLeft()
     {
+        if (!_canSwipe) return;
         if (CurrentLane == data.laneLeft) return;
 
         SoundManager.Instance.PlayEffectRandomOnce(data.SwipeAudio);
@@ -247,8 +288,9 @@ public class Player : MonoBehaviour
         CurrentLane = data.laneMid;
     }
 
-    public void PlayerMoveRight(InputAction.CallbackContext obj)
+    public void PlayerMoveRight()
     {
+        if (!_canSwipe) return;
         if (CurrentLane == data.laneRight) return;
 
         SoundManager.Instance.PlayEffectRandomOnce(data.SwipeAudio);

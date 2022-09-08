@@ -13,9 +13,8 @@ public class Player_state_jump : Player_base_state
     {
         base.Enter();
         player.ApplyGravity();
-        InputHandler.Instance.Input.Player.Up.performed -= player.PlayerJump;
-        InputHandler.Instance.Input.Player.Left.performed += player.PlayerMoveLeft;
-        InputHandler.Instance.Input.Player.Right.performed += player.PlayerMoveRight;
+        player.LockJump();
+        player.UnlockSwipe();
     }
 
     public override void Exit()
