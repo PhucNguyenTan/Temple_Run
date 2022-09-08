@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 8655409552633857889}
   - component: {fileID: 8655409552633857888}
   - component: {fileID: 8655409552633857887}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _obstacle: {fileID: 6128858171722335374, guid: 03342240351156446985d9cf6084f188, type: 3}
   _data: {fileID: 11400000, guid: 61ef0a451e3215c488e4f0a6387e6242, type: 2}
-  _hasObstacle: 0
+  _hasObstacle: 1
 --- !u!1 &8655409553051229231
 GameObject:
   m_ObjectHideFlags: 0

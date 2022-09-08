@@ -4,27 +4,20 @@ using UnityEngine;
 
 public class GroundTile : MonoBehaviour
 {
-    GroundSpawner groundSpawner;
     [SerializeField] GameObject _obstacle;
     [SerializeField] Player_data _data;
     [SerializeField] bool _hasObstacle;
     float _speed = 0f;
     float[] _h_positions = new float[3];
     bool _isPause = true;
+    Vector3 _arrangedPosition;
+    bool _useArrangedPosition = false;
+    Vector3 _currentPosition;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.transform.gameObject.layer == 8)
-        {
-            groundSpawner.RemoveLastInList();
-            Destroy(gameObject, 1f);
-
-        }
-    }
+    
 
     private void Start()
     {
-        groundSpawner = GameObject.FindObjectOfType<GroundSpawner>();
         if (_hasObstacle)
         {
             _h_positions = new float[] {_data.laneLeft, _data.laneMid, _data.laneRight};
@@ -49,7 +42,8 @@ public class GroundTile : MonoBehaviour
         Instantiate(_obstacle, pointSpawnObstacle, Quaternion.identity, transform);
     }
 
-    private void Scrolling()
+
+    void Scrolling()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - _speed * Time.deltaTime);
     }
@@ -74,5 +68,20 @@ public class GroundTile : MonoBehaviour
         _hasObstacle = false;
     }
 
-    
+    void MoveToObject()
+    {
+        RaycastHit hit;
+        bool touched = Physics.Raycast(transform.position, Vector3.back, out hit, 5.0f, 6);
+        if (!touched) {
+            Scrolling();
+            return;}
+        transform.position = hit.point;
+    }
+
+    public void OffsetZ(float offsetZ)
+    {
+        Vector3 offset = Vector3.zero;
+        offset.z = offsetZ;
+        transform.position += offset * Time.deltaTime;
+    }
 }

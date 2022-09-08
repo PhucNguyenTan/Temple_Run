@@ -15,6 +15,7 @@ public class GroundSpawner : MonoBehaviour
     int _currentLevel = 0;
     int _lastLevel = 0;
     int _incremetal = 10;
+    [SerializeField] int _maxLevel = 10;
     float _groundSpeed = 2.0f;
     
     private List<GroundTile> listGround = new List<GroundTile>();
@@ -74,18 +75,28 @@ public class GroundSpawner : MonoBehaviour
     {
         if (!isPause)
         {
+            CheckLevelUp();
             CreateNextGround();
-            if (_lastLevel < _currentLevel)
-            {
-                _lastLevel = _currentLevel;
-                _groundSpeed += 1f;
-                SpeedUp();
-            }
+
+
         }
         
     }
 
-    public void RemoveLastInList()
+    void CheckLevelUp()
+    {
+        if (_currentLevel >= _maxLevel) return;
+
+        _currentLevel = _groundCount / _incremetal;
+        if (_lastLevel < _currentLevel)
+        {
+            _lastLevel = _currentLevel;
+            _groundSpeed += 1f;
+            SpeedUp();
+        }
+    }
+
+    public void RemoveFirstInList()
     {
         listGround.RemoveAt(0);
     }
@@ -103,8 +114,8 @@ public class GroundSpawner : MonoBehaviour
     GroundTile CreateNewGround()
     {
         _groundCount++;
-        _currentLevel = _groundCount / _incremetal;
         GroundTile newGround = Instantiate(_groundTile, _nextSpawnPoint, Quaternion.identity);
+        newGround.name += "_" + _groundCount;
         _nextSpawnPoint = newGround.transform.Find("SpawnPoint").transform.position;
         newGround.UpdateScrollSpeed(_groundSpeed);
         return newGround;
@@ -116,7 +127,9 @@ public class GroundSpawner : MonoBehaviour
         {
             int lastestGround = listGround.Count - 1;
             _nextSpawnPoint = listGround[lastestGround].transform.Find("SpawnPoint").transform.position;
+            Vector3 test = _nextSpawnPoint;
             _currentGround = CreateNewGround();
+            _currentGround.OffsetZ(-_groundSpeed);
             _currentGround.UnPause();
             listGround.Add(_currentGround);
         }
@@ -157,5 +170,15 @@ public class GroundSpawner : MonoBehaviour
         _nextSpawnPoint = Vector3.zero;
         _groundCount = 0;
         CreateStartingGrounds();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        int objLayerNum = other.transform.gameObject.layer;
+        if (objLayerNum == 9)
+        {
+            RemoveFirstInList();
+            Destroy(other.gameObject);
+        }
     }
 }
