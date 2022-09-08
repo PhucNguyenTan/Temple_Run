@@ -17,8 +17,8 @@ public class GameCamera : MonoBehaviour
     private void LateUpdate()
     {
         Vector3 targetPos = _player.transform.position + _offset;
-        targetPos.x = 0f;
-        targetPos.y = 0.5f;
+        targetPos.x = _offset.x;
+        targetPos.y = _offset.y;
         transform.position = targetPos;
     }
 

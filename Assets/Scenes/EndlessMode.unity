@@ -822,6 +822,9 @@ MonoBehaviour:
   Pause:
     m_PersistentCalls:
       m_Calls: []
+  _minSwipeLength: 0.05
+  _maxSwipeTime: 0.5
+  _directionThreshold: 0.3
 --- !u!114 &415185354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,6 +870,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b993f3fa-bc33-4e76-9f9f-11b6a751a351
     m_ActionName: Player/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b196704-559e-41be-a758-18fb151e8952
+    m_ActionName: Player/PrimaryContact[/Simulated Touchscreen/primaryTouch/press]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2957d408-31db-4dbd-867b-9838b0a5547d
+    m_ActionName: Player/PrimaryPosition[/Simulated Touchscreen/primaryTouch/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1652,7 +1663,7 @@ MonoBehaviour:
   _yPos: 0
   _player: {fileID: 2011067128}
   _smoothSpeed: 0
-  _offset: {x: 0, y: 0, z: -0.9}
+  _offset: {x: 0, y: 0, z: -1.5}
   _shakeMagniture: 4
   _shakeRange: 3
   _shakeFadeIn: 0.3
@@ -3290,6 +3301,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b993f3fa-bc33-4e76-9f9f-11b6a751a351
     m_ActionName: Player/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b196704-559e-41be-a758-18fb151e8952
+    m_ActionName: Player/PrimaryContact[/Simulated Touchscreen/primaryTouch/press]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2957d408-31db-4dbd-867b-9838b0a5547d
+    m_ActionName: Player/PrimaryPosition[/Simulated Touchscreen/primaryTouch/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
