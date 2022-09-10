@@ -1751,9 +1751,33 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _ground
+      value: 
+      objectReference: {fileID: 4569918904851313187, guid: 141f146e7cbb4644ca7fd782cb15cc66, type: 3}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: groundTile
       value: 
       objectReference: {fileID: 8655409552633857887, guid: b2215ff24cb78dc4bb0442f74d09dcb2, type: 3}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _nextSpawnPoint.z
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _groundDatas.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _groundTypes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _groundDatas.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 272c726e0857ed14e9691b1b5b50c3da, type: 2}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _groundDatas.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 80f56e7499d79084db0225b348bfea5d, type: 2}
     - target: {fileID: 5030180425957794281, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -2610,67 +2634,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1667631956}
   m_CullTransparentMesh: 1
---- !u!1 &1757581331
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1757581333}
-  - component: {fileID: 1757581332}
-  - component: {fileID: 1757581334}
-  m_Layer: 9
-  m_Name: UnSpawnBox
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!65 &1757581332
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1757581331}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &1757581333
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1757581331}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.014}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1757581334
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1757581331}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1797688774
 GameObject:
   m_ObjectHideFlags: 0

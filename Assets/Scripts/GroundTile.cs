@@ -10,9 +10,6 @@ public class GroundTile : MonoBehaviour
     float _speed = 0f;
     float[] _h_positions = new float[3];
     bool _isPause = true;
-    Vector3 _arrangedPosition;
-    bool _useArrangedPosition = false;
-    Vector3 _currentPosition;
 
     
 

@@ -8,6 +8,7 @@ TagManager:
   - player_main
   - redbox_dare
   - redbox
+  - bigRedbox
   layers:
   - Default
   - TransparentFX

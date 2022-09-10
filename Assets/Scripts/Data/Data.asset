@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad6ac3622cb0dee42b27192e98e8f9c7, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  SwipeDuration: 0.5
+  SwipeDuration: 0.1
   SwipeSpeed: 1.5
-  maxJumpTime: 1
+  maxJumpTime: 0.5
   maxJumpHeight: 0.001
   laneMid: 0
   laneLeft: -0.25

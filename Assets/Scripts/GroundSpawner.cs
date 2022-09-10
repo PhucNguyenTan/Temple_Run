@@ -4,35 +4,21 @@ using UnityEngine;
 
 public class GroundSpawner : MonoBehaviour
 {
-    [SerializeField] GroundTile _groundTile;
+    [SerializeField] Ground_data[] _groundDatas;
+    [SerializeField] GroundType _ground;
     [SerializeField] Vector3 _nextSpawnPoint = Vector3.zero;
     [SerializeField] int _tileLimit = 10;
-    //private GameObject[10] currentGrounds;
-    //public GameObject[] arrayGround;
+    [SerializeField] int _maxLevel = 10;
 
-    GroundTile _currentGround;
+    GroundType _currentGround;
     int _groundCount;
     int _currentLevel = 0;
     int _lastLevel = 0;
     int _incremetal = 10;
-    [SerializeField] int _maxLevel = 10;
     float _groundSpeed = 2.0f;
+    List<GroundType> listGround = new List<GroundType>();
     
-    private List<GroundTile> listGround = new List<GroundTile>();
     public bool isPause { get; private set; } = false;
-
-    /*public void SpawnGround(GroundTile prevGround)
-    {
-        Vector3 spawnPOint = prevGround.transform.GetChild(0).transform.position;
-        currentGround = Instantiate(groundTile, spawnPOint, Quaternion.identity);
-        
-    }*/
-
-    /*public void StartSpawning()
-    {
-        currentGround = Instantiate(groundTile, nextSpawnPoint, Quaternion.identity);
-        nextSpawnPoint = currentGround.transform.GetChild(0).transform.position;
-    }*/
 
     private void Awake()
     {
@@ -111,13 +97,19 @@ public class GroundSpawner : MonoBehaviour
         }
     }
 
-    GroundTile CreateNewGround()
+    GroundType CreateNewGround()
     {
         _groundCount++;
-        GroundTile newGround = Instantiate(_groundTile, _nextSpawnPoint, Quaternion.identity);
+
+        //This is GroundSpawner in the scene
+        GroundType newGround = Instantiate(_ground, _nextSpawnPoint, Quaternion.identity);
+        //newGround.SetGroundData(_groundDatas[1]);
+        newGround.SetGroundData(_groundDatas[Random.Range(0, _groundDatas.Length)]);
         newGround.name += "_" + _groundCount;
-        _nextSpawnPoint = newGround.transform.Find("SpawnPoint").transform.position;
+
+        _nextSpawnPoint = newGround.GetNexSpawnPoint();
         newGround.UpdateScrollSpeed(_groundSpeed);
+        newGround.UnPause();
         return newGround;
     }
 
@@ -126,11 +118,10 @@ public class GroundSpawner : MonoBehaviour
         if (listGround.Count < _tileLimit)
         {
             int lastestGround = listGround.Count - 1;
-            _nextSpawnPoint = listGround[lastestGround].transform.Find("SpawnPoint").transform.position;
+            _nextSpawnPoint = listGround[lastestGround].GetNexSpawnPoint(); 
             Vector3 test = _nextSpawnPoint;
             _currentGround = CreateNewGround();
             _currentGround.OffsetZ(-_groundSpeed);
-            _currentGround.UnPause();
             listGround.Add(_currentGround);
         }
     }

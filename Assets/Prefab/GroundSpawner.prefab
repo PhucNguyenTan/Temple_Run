@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4eefd51051a8448b26db9850040660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _groundTile: {fileID: 8655409552633857887, guid: b2215ff24cb78dc4bb0442f74d09dcb2, type: 3}
+  _groundDatas: []
+  _ground: {fileID: 4569918904851313187, guid: 141f146e7cbb4644ca7fd782cb15cc66, type: 3}
   _nextSpawnPoint: {x: 0, y: 0, z: 0}
   _tileLimit: 10
   _maxLevel: 20

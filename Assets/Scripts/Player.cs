@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
 
     #region Events
     public UnityAction OnObstacleCollided;
+    public UnityAction OnBigObstacleCollided;
     #endregion
 
     private bool redDare_touched = false;
@@ -314,9 +315,9 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public void TakeDamage()
+    public void TakeDamage(float damage)
     {
-        health -= 10f;
+        health -= damage;
         ingameUI.SetHealthValue(health);
         if(health <= 0)
         {
@@ -342,12 +343,14 @@ public class Player : MonoBehaviour
             OnObstacleCollided?.Invoke();
             Destroy(other.gameObject);
             SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
-            TakeDamage();
+            TakeDamage(10f);
         }
 
-        else if (other.CompareTag("redbox_dare"))
+        else if (other.CompareTag("bigRedbox"))
         {
-            
+            OnBigObstacleCollided?.Invoke();
+            SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
+            TakeDamage(health);
         }
 
 
