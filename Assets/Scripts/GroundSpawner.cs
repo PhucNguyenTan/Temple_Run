@@ -90,20 +90,32 @@ public class GroundSpawner : MonoBehaviour
     public void CreateStartingGrounds() {
         for (int i = 0; i < _tileLimit; i++)
         {
-            _currentGround = CreateNewGround();
-            if (i == 0) 
-                _currentGround.NoObstacle();
+            if (i == 0)
+                _currentGround = CreateFirstGround();
+            else
+                _currentGround = CreateNewGround();
             listGround.Add(_currentGround);
         }
+    }
+
+    GroundType CreateFirstGround()
+    {
+        _groundCount++;
+        GroundType newGround = Instantiate(_ground, _nextSpawnPoint, Quaternion.identity);
+        newGround.SetGroundData(_groundDatas[0]);
+        newGround.NoObstacle();
+
+        _nextSpawnPoint = newGround.GetNexSpawnPoint();
+        newGround.UpdateScrollSpeed(_groundSpeed);
+        newGround.UnPause();
+        return newGround;
     }
 
     GroundType CreateNewGround()
     {
         _groundCount++;
 
-        //This is GroundSpawner in the scene
         GroundType newGround = Instantiate(_ground, _nextSpawnPoint, Quaternion.identity);
-        //newGround.SetGroundData(_groundDatas[1]);
         newGround.SetGroundData(_groundDatas[Random.Range(0, _groundDatas.Length)]);
         newGround.name += "_" + _groundCount;
 

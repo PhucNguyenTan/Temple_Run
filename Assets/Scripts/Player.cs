@@ -190,13 +190,19 @@ public class Player : MonoBehaviour
 
     public bool IsGrounded()
     {
-        if (!CanCheckGrounded) return false;
+        if (!CanCheckGrounded)
+        {
+            return false;
+        }
         RaycastHit hit;
         Vector3 test = -transform.up * data.GroundDectectHeight;
-        bool castTouch = Physics.Raycast(transform.position, -transform.up, out hit, 10 ,data.Standable);
+        bool isGroundBelow = Physics.Raycast(transform.position, -transform.up, out hit, 10 ,data.Standable);
 
-        if (!castTouch)
+        if (!isGroundBelow)
+        {
+            _y_StableGroudn = -1000f;
             return false;
+        }
 
         _y_StableGroudn = hit.point.y + data.GroundDectectHeight;
         if (hit.distance <= data.GroundDectectHeight)
@@ -235,6 +241,7 @@ public class Player : MonoBehaviour
     {
         _v_force += _gravity  * Time.deltaTime;
         _v_force = Mathf.Max(data.Gravity, _v_force);
+
         _v_current = transform.position.y + _v_force;
         if (_v_current < _y_StableGroudn)
         {
@@ -367,6 +374,15 @@ public class Player : MonoBehaviour
     public void waitBeforeCheckGround(float timeToWait)
     {
         StartCoroutine(Wait(timeToWait));
+    }
+
+    public bool IsFallOff()
+    {
+        if(transform.position.y < 0)
+        {
+            return true;
+        }
+        return false;
     }
 
 }

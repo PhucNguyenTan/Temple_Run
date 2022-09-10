@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player_state_jump : Player_base_state
 {
-    bool jumped = false;
     public Player_state_jump(Player player, Player_state_machine stateMachine, Player_data data, string animName) : base(player, stateMachine, data, animName)
     {
     }
@@ -28,6 +27,11 @@ public class Player_state_jump : Player_base_state
         base.LogicUpdate();
         bool isGrounded = player.IsGrounded();
         bool isSwiping = player.IsSwiping();
+        bool isFalloff = player.IsFallOff();
+        if (isFalloff)
+        {
+            player.TakeDamage(player.health);
+        }
         if (isGrounded)
         {
             SoundManager.Instance.PlayEffectRandomOnce(data.LandAudio);
