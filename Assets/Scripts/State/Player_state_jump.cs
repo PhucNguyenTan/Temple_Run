@@ -30,6 +30,7 @@ public class Player_state_jump : Player_base_state
         bool isFalloff = player.IsFallOff();
         if (isFalloff)
         {
+            SoundManager.Instance.PlayEffectRandomOnce(data.FallOffAudio);
             player.TakeDamage(player.health);
         }
         if (isGrounded)

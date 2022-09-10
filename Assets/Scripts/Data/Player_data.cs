@@ -32,6 +32,8 @@ public class Player_data : ScriptableObject
     public AudioClip[] SwipeAudio;
     //public AudioClip[] RollAudio;
     public AudioClip[] CollidingAudio;
+    public AudioClip[] FallOffAudio;
+    public AudioClip[] CollidingBig;
 
     [Header("Debug")]
     public bool IsShowStatesName;

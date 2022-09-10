@@ -46,4 +46,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ec7a63d7f29ba574e9eff3a61b572132, type: 3}
   - {fileID: 8300000, guid: 4e572468218e4f64180f3e800182fe57, type: 3}
   - {fileID: 8300000, guid: 987410e4e05b9b84abb490a937b617a4, type: 3}
-  IsShowStatesName: 1
+  FallOffAudio:
+  - {fileID: 8300000, guid: 522196d564c0e674da1281cc2092eecf, type: 3}
+  CollidingBig: []
