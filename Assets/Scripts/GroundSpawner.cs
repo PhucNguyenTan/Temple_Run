@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class GroundSpawner : MonoBehaviour
 {
-    [SerializeField] Ground_data[] _groundDatas;
     [SerializeField] GroundType _ground;
     [SerializeField] Vector3 _nextSpawnPoint = Vector3.zero;
     [SerializeField] int _tileLimit = 10;
     [SerializeField] int _maxLevel = 10;
 
+    [SerializeField] List<Ground_data> _easyGrounds;
+    [SerializeField] List<Ground_data> _normalGrounds;
+    [SerializeField] List<Ground_data> _hardGrounds;
+
+    [SerializeField] float _speedPerLevel;
+    [SerializeField] int _incremetal = 10;
+    [SerializeField] float _groundSpeed = 2.0f;
     GroundType _currentGround;
+
+    List<Ground_data> _allowedGrounds = new List<Ground_data>();
+    List<Ground_data> _disallowedGrounds = new List<Ground_data>();
     int _groundCount;
-    int _currentLevel = 0;
-    int _lastLevel = 0;
-    int _incremetal = 10;
-    float _groundSpeed = 2.0f;
+    int _currentLevel;
+    int _lastLevel;
+
     List<GroundType> listGround = new List<GroundType>();
     
     public bool isPause { get; private set; } = false;
@@ -48,13 +56,8 @@ public class GroundSpawner : MonoBehaviour
                 PauseScrolling();
                 break;
         }
-        //throw new System.NotImplementedException();
     }
 
-    private void Start()
-    {
-        
-    }
 
 
     private void Update()
@@ -63,8 +66,6 @@ public class GroundSpawner : MonoBehaviour
         {
             CheckLevelUp();
             CreateNextGround();
-
-
         }
         
     }
@@ -77,8 +78,19 @@ public class GroundSpawner : MonoBehaviour
         if (_lastLevel < _currentLevel)
         {
             _lastLevel = _currentLevel;
-            _groundSpeed += 1f;
+            _groundSpeed += _speedPerLevel;
             SpeedUp();
+            if (_currentLevel > 3)
+            {
+                _disallowedGrounds.Clear();
+                _allowedGrounds.Clear();
+                _allowedGrounds.AddRange(_normalGrounds);
+            }
+            //else if (_currentLevel > 7) {
+            //    _disallowedGrounds.Clear();
+            //    _allowedGrounds.Clear();
+            //    _allowedGrounds.AddRange(_hardGrounds);
+            //}
         }
     }
 
@@ -87,6 +99,7 @@ public class GroundSpawner : MonoBehaviour
         listGround.RemoveAt(0);
     }
 
+    #region Spawn functions
     public void CreateStartingGrounds() {
         for (int i = 0; i < _tileLimit; i++)
         {
@@ -102,10 +115,10 @@ public class GroundSpawner : MonoBehaviour
     {
         _groundCount++;
         GroundType newGround = Instantiate(_ground, _nextSpawnPoint, Quaternion.identity);
-        newGround.SetGroundData(_groundDatas[0]);
+        newGround.SetGroundData(_easyGrounds[0]);
         newGround.NoObstacle();
 
-        _nextSpawnPoint = newGround.GetNexSpawnPoint();
+        _nextSpawnPoint = newGround.GetNextSpawnPoint();
         newGround.UpdateScrollSpeed(_groundSpeed);
         newGround.UnPause();
         return newGround;
@@ -114,12 +127,21 @@ public class GroundSpawner : MonoBehaviour
     GroundType CreateNewGround()
     {
         _groundCount++;
+        int randomGroundindex = Random.Range(0, _allowedGrounds.Count - 1);
 
         GroundType newGround = Instantiate(_ground, _nextSpawnPoint, Quaternion.identity);
-        newGround.SetGroundData(_groundDatas[Random.Range(0, _groundDatas.Length)]);
+        newGround.SetGroundData(_allowedGrounds[randomGroundindex]);
         newGround.name += "_" + _groundCount;
 
-        _nextSpawnPoint = newGround.GetNexSpawnPoint();
+        _disallowedGrounds.Add(_allowedGrounds[randomGroundindex]);
+        _allowedGrounds.RemoveAt(randomGroundindex);
+        if(_allowedGrounds.Count == 0)
+        {
+            _allowedGrounds.AddRange(_disallowedGrounds);
+            _disallowedGrounds.Clear();
+        }
+
+        _nextSpawnPoint = newGround.GetNextSpawnPoint();
         newGround.UpdateScrollSpeed(_groundSpeed);
         newGround.UnPause();
         return newGround;
@@ -130,7 +152,7 @@ public class GroundSpawner : MonoBehaviour
         if (listGround.Count < _tileLimit)
         {
             int lastestGround = listGround.Count - 1;
-            _nextSpawnPoint = listGround[lastestGround].GetNexSpawnPoint(); 
+            _nextSpawnPoint = listGround[lastestGround].GetNextSpawnPoint(); 
             Vector3 test = _nextSpawnPoint;
             _currentGround = CreateNewGround();
             _currentGround.OffsetZ(-_groundSpeed);
@@ -138,6 +160,9 @@ public class GroundSpawner : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Handle Ground
     public void PauseScrolling()
     {
         for (int i = 0; i < listGround.Count; i++)
@@ -161,6 +186,7 @@ public class GroundSpawner : MonoBehaviour
             listGround[i].UpdateScrollSpeed(_groundSpeed);
         }
     }
+    #endregion
 
     public void Initialize()
     {
@@ -169,10 +195,17 @@ public class GroundSpawner : MonoBehaviour
             Debug.Log($"{listGround[i].name} was destroyed");
             Destroy(listGround[i].gameObject);
         }
+        _currentLevel = 0;
+        _lastLevel = 0;
         listGround.Clear();
         _nextSpawnPoint = Vector3.zero;
         _groundCount = 0;
+        _groundSpeed = 2f;
+        _disallowedGrounds.Clear();
+        _allowedGrounds.Clear();
+        _allowedGrounds.AddRange(_easyGrounds);
         CreateStartingGrounds();
+
     }
 
     private void OnTriggerExit(Collider other)

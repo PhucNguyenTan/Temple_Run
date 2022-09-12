@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static GameState State = GameState.CountDown;
 
-    public static event UnityAction<GameState> OnStateChange; //???
+    public static event UnityAction<GameState> OnStateChange; 
     public GameObject player;
     public GameObject groundSpawner;
 
@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     {
         UpdateGameState(GameState.CountDown);
     }
-
 
     public static void UpdateGameState(GameState newState)
     {

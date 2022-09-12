@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad6ac3622cb0dee42b27192e98e8f9c7, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  SwipeDuration: 0.1
+  SwipeDuration: 0.2
   SwipeSpeed: 1.5
-  maxJumpTime: 0.5
-  maxJumpHeight: 0.001
+  maxJumpTime: 0.65
+  maxJumpHeight: 0.0012
   laneMid: 0
   laneLeft: -0.25
   laneRight: 0.25
@@ -49,3 +49,4 @@ MonoBehaviour:
   FallOffAudio:
   - {fileID: 8300000, guid: 522196d564c0e674da1281cc2092eecf, type: 3}
   CollidingBig: []
+  IsShowStatesName: 1

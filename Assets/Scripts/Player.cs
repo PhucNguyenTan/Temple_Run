@@ -355,12 +355,11 @@ public class Player : MonoBehaviour
 
         else if (other.CompareTag("bigRedbox"))
         {
+            Destroy(other.gameObject);
             OnBigObstacleCollided?.Invoke();
             SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
-            TakeDamage(health);
+            TakeDamage(20f);
         }
-
-
     }
     #endregion
 

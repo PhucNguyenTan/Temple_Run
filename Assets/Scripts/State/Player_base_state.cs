@@ -21,7 +21,8 @@ public class Player_base_state
 
     public virtual void Enter()
     {
-        Debug.Log(animName);
+        if(data.IsShowStatesName)
+            Debug.Log(animName);
     }
 
     public virtual void Exit()

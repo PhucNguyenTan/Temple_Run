@@ -45,7 +45,6 @@ public class GroundType : MonoBehaviour
         Vector3 groundSpawnPoint = transform.position + _box.center;
         //This is the prefab GroundSpawner is spawning and this GroundType try to Instantiate a GameObject
         Instantiate(_data.GroundPrefab, groundSpawnPoint, Quaternion.identity, transform);
-        Debug.Log("Ground got here first");
 
         if (_hasObstacle && _data.ObstacleTypes.Length > 0)
         {
@@ -53,7 +52,7 @@ public class GroundType : MonoBehaviour
         }
     }
 
-    public Vector3 GetNexSpawnPoint()
+    public Vector3 GetNextSpawnPoint()
     {
         return transform.position + _box.center * 2;
     }
@@ -65,7 +64,6 @@ public class GroundType : MonoBehaviour
         Vector3 pointSpawnObstacle = new Vector3(lane[randomLane] , .15f, _box.center.z);
         int randomObstacleNum = Random.Range(0, _data.ObstacleTypes.Length);
         Instantiate(_data.ObstacleTypes[randomObstacleNum], transform.position + pointSpawnObstacle, Quaternion.identity, transform);
-        Debug.Log("Obstacle");
     }
 
 
