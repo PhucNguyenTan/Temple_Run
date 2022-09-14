@@ -25,15 +25,23 @@ public class GameCamera : MonoBehaviour
     private void OnEnable()
     {
         _player.OnObstacleCollided += CameraShake;
+        _player.OnBigObstacleCollided += CameraShakeBig;
     }
 
     private void OnDisable()
     {
+        _player.OnBigObstacleCollided -= CameraShakeBig;
         _player.OnObstacleCollided -= CameraShake;
     }
 
     public void CameraShake()
     {
-        CameraShaker.Instance.ShakeOnce(_shakeMagniture, _shakeRange, _shakeFadeIn, _shakeFadeOut);
+        CameraShaker.Instance.ShakeOnce(_shakeMagniture, _shakeRange, _shakeFadeIn * 1.5f, _shakeFadeOut*1.5f);
+    }
+
+    public void CameraShakeBig()
+    {
+        CameraShaker.Instance.ShakeOnce(_shakeMagniture * 1.5f, _shakeRange * 1.5f , _shakeFadeIn, _shakeFadeOut);
+
     }
 }

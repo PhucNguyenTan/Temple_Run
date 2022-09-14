@@ -31,13 +31,13 @@ public class Player_state_airSwipe : Player_base_state
             SoundManager.Instance.PlayEffectRandomOnce(data.LandAudio);
             if (isSwiping)
             {
-                player.UnapplyGravity();
+                player.UnApplyGravity();
                 stateMachine.ChangeState(player.stateSwiping);
             }
             else
             {
                 player.EndSwipe();
-                player.UnapplyGravity();
+                player.UnApplyGravity();
                 stateMachine.ChangeState(player.stateNoSwipe);
             }
         }

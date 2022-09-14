@@ -109,6 +109,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7226c2e80cc4d408eb9557b4e21019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coin: {fileID: 173740097663670227, guid: 068e6559e55b6664e9aeb6374e5aa48b, type: 3}
+  pickUpSpawnPoints:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: -0.3}
+  - {x: 0, y: 0.3, z: 0}
 --- !u!1 &8929299745704331543
 GameObject:
   m_ObjectHideFlags: 0

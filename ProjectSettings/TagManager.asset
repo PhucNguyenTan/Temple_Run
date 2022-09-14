@@ -9,6 +9,8 @@ TagManager:
   - redbox_dare
   - redbox
   - bigRedbox
+  - Coin
+  - Health
   layers:
   - Default
   - TransparentFX

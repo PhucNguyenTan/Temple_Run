@@ -16,6 +16,7 @@ MonoBehaviour:
   SwipeSpeed: 1.5
   maxJumpTime: 0.65
   maxJumpHeight: 0.3
+  CoyoteTime: 0.3
   laneMid: 0
   laneLeft: -0.25
   laneRight: 0.25
@@ -24,7 +25,7 @@ MonoBehaviour:
     m_Bits: 64
   GroudY: 1
   GroundDectectHeight: 0.1
-  health: 50
+  MaxHealth: 50
   forwardSpeed: 1
   Gravity: -9.8
   GroundGravity: -0.5

@@ -11,15 +11,14 @@ public class Player_state_jump : Player_base_state
     public override void Enter()
     {
         base.Enter();
-        player.ApplyGravity();
-        player.LockJump();
         player.UnlockSwipe();
+        player.ApplyGravity();
     }
 
     public override void Exit()
     {
         base.Exit();
-        player.UnapplyGravity();
+        player.UnApplyGravity();
     }
 
     public override void LogicUpdate()
@@ -28,10 +27,18 @@ public class Player_state_jump : Player_base_state
         bool isGrounded = player.IsGrounded();
         bool isSwiping = player.IsSwiping();
         bool isFalloff = player.IsFallOff();
+        if(player.CoyoteTimeCounter > 0f)
+        {
+             player.UnlockJump();
+        }
+        else
+        {
+            player.LockJump();
+        }
         if (isFalloff)
         {
             SoundManager.Instance.PlayEffectRandomOnce(data.FallOffAudio);
-            player.TakeDamage(player.health);
+            player.TakeDamage(player.Health);
         }
         if (isGrounded)
         {

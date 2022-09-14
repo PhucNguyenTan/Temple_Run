@@ -822,7 +822,7 @@ MonoBehaviour:
   Pause:
     m_PersistentCalls:
       m_Calls: []
-  _minSwipeLength: 0.05
+  _minSwipeLength: 0.005
   _maxSwipeTime: 0.5
   _directionThreshold: 0.3
 --- !u!114 &415185354

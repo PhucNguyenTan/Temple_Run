@@ -10,6 +10,10 @@ public class Player_data : ScriptableObject
     public float maxJumpTime = 1.0f;
     public float maxJumpHeight = 0.3f;
 
+    [Header("Buffering")]
+    public float CoyoteTime;
+    
+
     [Header("Lane")]
     public float laneMid = 0f;
     public float laneLeft = -0.25f;
@@ -19,7 +23,7 @@ public class Player_data : ScriptableObject
     public float GroundDectectHeight;
 
     [Header("Properties")]
-    public float health = 50f;
+    public float MaxHealth = 50f;
     public float forwardSpeed;
 
     [Header("World_Properties")]

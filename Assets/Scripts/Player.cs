@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     float _initialJumpVelocity;
     float _gravity;
     float _vForceApply;
-    float _y_StableGroudn;
+    float _y_StableGround;
     float _v_force = 0f;
     float _v_prevForce = 0f;
     Vector3 _bottomContact;
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     public bool isPause { get; private set; } = true; 
     #endregion
     #region Health and score
-    public float health { get; private set; }
+    public float Health { get; private set; }
     public int score { get; private set; } = 0;
     public bool CanCheckGrounded { get; private set; }
     public bool IsApplyGravity { get; private set; }
@@ -56,9 +56,15 @@ public class Player : MonoBehaviour
     #region Events
     public UnityAction OnObstacleCollided;
     public UnityAction OnBigObstacleCollided;
+    public UnityAction OnPickupCoin;
+    public UnityAction OnPickupHealth;
     #endregion
 
     private bool redDare_touched = false;
+
+    #region Buffering variable
+    public float CoyoteTimeCounter { get; private set; }
+    #endregion
 
     private void Awake()
     {
@@ -202,15 +208,18 @@ public class Player : MonoBehaviour
 
         if (!isGroundBelow)
         {
-            _y_StableGroudn = -10f;
+            _y_StableGround = -10f;
+            CoyoteTimeCounter -= Time.deltaTime;
             return false;
         }
 
-        _y_StableGroudn = hit.point.y + data.GroundDectectHeight;
+        _y_StableGround = hit.point.y + data.GroundDectectHeight;
         if (hit.distance <= data.GroundDectectHeight)
         {
+            CoyoteTimeCounter = data.CoyoteTime;
             return true;
         }
+        CoyoteTimeCounter -= Time.deltaTime;
         return false;
     }
 
@@ -236,20 +245,21 @@ public class Player : MonoBehaviour
     }
 
     public void ApplyGravity() { IsApplyGravity = true; }
-    public void UnapplyGravity() { IsApplyGravity = false; }
+    public void UnApplyGravity() { IsApplyGravity = false; }
 
 
     public void AddGravity()
     {
+        if (!IsApplyGravity) return;
         _v_prevForce = _v_force;
         _v_force += _gravity * Time.deltaTime;
         _vForceApply = Mathf.Max((_v_prevForce + _v_force) * .5f, data.Gravity);
         _v_current = transform.position.y + (_vForceApply * Time.deltaTime);
 
-        if (_v_current < _y_StableGroudn)
+        if (_v_current < _y_StableGround)
         {
-            _v_current = _y_StableGroudn;
-            UnapplyGravity();
+            _v_current = _y_StableGround;
+            UnApplyGravity();
         }
     }
 
@@ -278,6 +288,7 @@ public class Player : MonoBehaviour
     {
         if (!_canJump) return;
         waitBeforeCheckGround(0.1f);
+        CoyoteTimeCounter = 0f;
         SoundManager.Instance.PlayEffectRandomOnce(data.JumpAudio);
         SetJumpVar();
         AddJumpForce();
@@ -327,18 +338,24 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
-        ingameUI.SetHealthValue(health);
-        if(health <= 0)
+        Health -= damage;
+        ingameUI.SetHealthValue(Health);
+        if(Health <= 0)
         {
             pStateMachine.ChangeState(stateDeath);
         }
     }
 
+    public void AddHealth(float health)
+    {
+        Health = Mathf.Min(Health + health, data.MaxHealth);
+        ingameUI.SetHealthValue(Health);
+    }
+
     public void InitializePlayer()
     {
-        health = data.health;
-        ingameUI.SetHealthValue(health);
+        Health = data.MaxHealth;
+        ingameUI.SetHealthValue(Health);
         //pStateMachine.ChangeState(stateNoSwipe); Should probably check why this doesn't work
         transform.position = new Vector3(0f, 0.432f, 0f);
         CurrentLane = data.laneMid;
@@ -362,6 +379,13 @@ public class Player : MonoBehaviour
             OnBigObstacleCollided?.Invoke();
             SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
             TakeDamage(20f);
+        }
+        else if (other.CompareTag("Health"))
+        {
+            Destroy(other.gameObject);
+            AddHealth(10f);
+            OnPickupHealth?.Invoke();
+
         }
     }
     #endregion
