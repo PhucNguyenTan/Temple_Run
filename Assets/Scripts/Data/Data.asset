@@ -15,7 +15,7 @@ MonoBehaviour:
   SwipeDuration: 0.2
   SwipeSpeed: 1.5
   maxJumpTime: 0.65
-  maxJumpHeight: 0.0012
+  maxJumpHeight: 0.3
   laneMid: 0
   laneLeft: -0.25
   laneRight: 0.25

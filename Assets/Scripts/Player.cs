@@ -28,11 +28,15 @@ public class Player : MonoBehaviour
     float _v_current = 0f;
     float _initialJumpVelocity;
     float _gravity;
+    float _vForceApply;
+    float _y_StableGroudn;
+    float _v_force = 0f;
+    float _v_prevForce = 0f;
     Vector3 _bottomContact;
 
     public float CurrentLane { get; private set; }
     public float PrevLane { get; private set; }
-    public bool isPause { get; private set; } = true;
+    public bool isPause { get; private set; } = true; 
     #endregion
     #region Health and score
     public float health { get; private set; }
@@ -55,9 +59,7 @@ public class Player : MonoBehaviour
     #endregion
 
     private bool redDare_touched = false;
-    float _y_StableGroudn;
 
-    float _v_force;
     private void Awake()
     {
         pStateMachine = new Player_state_machine();
@@ -200,7 +202,7 @@ public class Player : MonoBehaviour
 
         if (!isGroundBelow)
         {
-            _y_StableGroudn = -1000f;
+            _y_StableGroudn = -10f;
             return false;
         }
 
@@ -239,10 +241,11 @@ public class Player : MonoBehaviour
 
     public void AddGravity()
     {
-        _v_force += _gravity  * Time.deltaTime;
-        _v_force = Mathf.Max(data.Gravity, _v_force);
+        _v_prevForce = _v_force;
+        _v_force += _gravity * Time.deltaTime;
+        _vForceApply = Mathf.Max((_v_prevForce + _v_force) * .5f, data.Gravity);
+        _v_current = transform.position.y + (_vForceApply * Time.deltaTime);
 
-        _v_current = transform.position.y + _v_force;
         if (_v_current < _y_StableGroudn)
         {
             _v_current = _y_StableGroudn;
@@ -253,19 +256,19 @@ public class Player : MonoBehaviour
     public void AddJumpForce()
     {
         _v_force = _initialJumpVelocity;
+         _vForceApply = _initialJumpVelocity;
     }
     #endregion
 
     public void SetJumpVar()
     {
-        float timeToApex = data.maxJumpTime / 2;
-        _gravity = (-2 * data.maxJumpHeight) / (timeToApex*timeToApex);
-        _initialJumpVelocity = (2 * data.maxJumpHeight) / timeToApex;
+        float timeToApex = data.maxJumpTime * .5f;
+        _gravity = (-2 * data.maxJumpHeight) / (timeToApex * timeToApex);
+        _initialJumpVelocity = 2 * data.maxJumpHeight / timeToApex;
     }
 
-    
 
-    #region Subscriber functions
+    #region Subscriber =======
     public void PlayerRoll()
     {
 
@@ -374,6 +377,7 @@ public class Player : MonoBehaviour
     {
         StartCoroutine(Wait(timeToWait));
     }
+
 
     public bool IsFallOff()
     {
