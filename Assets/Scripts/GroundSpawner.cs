@@ -9,6 +9,7 @@ public class GroundSpawner : MonoBehaviour
     [SerializeField] int _tileLimit = 10;
     [SerializeField] int _maxLevel = 10;
 
+    [SerializeField] Ground_data _startGround;
     [SerializeField] List<Ground_data> _easyGrounds;
     [SerializeField] List<Ground_data> _normalGrounds;
     [SerializeField] List<Ground_data> _hardGrounds;
@@ -115,8 +116,7 @@ public class GroundSpawner : MonoBehaviour
     {
         _groundCount++;
         GroundType newGround = Instantiate(_ground, _nextSpawnPoint, Quaternion.identity);
-        newGround.SetGroundData(_easyGrounds[0]);
-        newGround.NoObstacle();
+        newGround.SetGroundData(_startGround);
 
         _nextSpawnPoint = newGround.GetNextSpawnPoint();
         newGround.UpdateScrollSpeed(_groundSpeed);

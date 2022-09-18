@@ -12,7 +12,7 @@ public class Player_data : ScriptableObject
 
     [Header("Buffering")]
     public float CoyoteTime;
-    
+         
 
     [Header("Lane")]
     public float laneMid = 0f;
@@ -21,7 +21,7 @@ public class Player_data : ScriptableObject
     public LayerMask Standable;
     public float GroudY;
     public float GroundDectectHeight;
-
+        
     [Header("Properties")]
     public float MaxHealth = 50f;
     public float forwardSpeed;

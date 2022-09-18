@@ -5,12 +5,13 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "ScriptableObject/GroundTile")]
 public class Ground_data : ScriptableObject
 {
-    public GameObject[] ObstacleTypes;
+    public GameObject Obstacle;
+    public Vector2[] ObstacleSpawnPoints;
+    public GameObject Pickup;
+    public Vector2[] PickupSpawnPoints;
     public GameObject GroundPrefab;
-    public int Level;
 
+    public float Probability;
+    public float Weight;
 
-
-    [Header("Debug")]
-    public bool ShowObstacle;
 }

@@ -5,13 +5,15 @@ using UnityEngine;
 public class GroundType : MonoBehaviour
 {
     Ground_data _data;
-    [SerializeField] Player_data _player_data;
-    [SerializeField] bool _hasObstacle;
+    bool _hasObstacle = true;
+    bool _hasPickup = true;
 
     float _speed = 0f;
     bool _isPause = true;
     BoxCollider _box;
     GameObject _ground;
+    GameObject _obstacle;
+    GameObject _pickup;
 
     private void Awake()
     {
@@ -46,9 +48,13 @@ public class GroundType : MonoBehaviour
         //This is the prefab GroundSpawner is spawning and this GroundType try to Instantiate a GameObject
         Instantiate(_data.GroundPrefab, groundSpawnPoint, Quaternion.identity, transform);
 
-        if (_hasObstacle && _data.ObstacleTypes.Length > 0)
+        if (_hasObstacle && _data.Obstacle != null)
         {
             SpawnObstacle();
+        }
+        if (_hasPickup && _data.Pickup != null)
+        {
+            SpawnPickup();
         }
     }
 
@@ -59,13 +65,18 @@ public class GroundType : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        float[] lane = new float[3] { _player_data.laneLeft, _player_data.laneMid, _player_data.laneRight};
-        int randomLane = Random.Range(0, lane.Length);
-        Vector3 pointSpawnObstacle = new Vector3(lane[randomLane] , .15f, _box.center.z);
-        int randomObstacleNum = Random.Range(0, _data.ObstacleTypes.Length);
-        Instantiate(_data.ObstacleTypes[randomObstacleNum], transform.position + pointSpawnObstacle, Quaternion.identity, transform);
+        var randomXYpos = _data.ObstacleSpawnPoints[Random.Range(0, _data.ObstacleSpawnPoints.Length)];
+        Vector3 randomPoint = new Vector3(randomXYpos.x, randomXYpos.y, _box.size.z * 0.5f);
+        _obstacle = Instantiate(_data.Obstacle, transform.position + randomPoint, Quaternion.identity, transform);
     }
 
+    private void SpawnPickup()
+    {
+        //Pickup will be spawn either Behind or Above Obstacle;
+        var randomYZpos = _data.PickupSpawnPoints[Random.Range(0, _data.PickupSpawnPoints.Length)];
+        Vector3 randomPoint = new Vector3(_obstacle.transform.position.x, randomYZpos.x, _box.size.z*0.5f - randomYZpos.y);
+        _pickup = Instantiate(_data.Pickup, transform.position + randomPoint, Quaternion.identity, transform);
+    }
 
     void Scrolling()
     {
@@ -90,6 +101,7 @@ public class GroundType : MonoBehaviour
     public void NoObstacle()
     {
         _hasObstacle = false;
+        _hasPickup = false;
     }
 
     void MoveToObject()

@@ -11,6 +11,7 @@ TagManager:
   - bigRedbox
   - Coin
   - Health
+  - Ground
   layers:
   - Default
   - TransparentFX

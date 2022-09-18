@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 396dd2fc85a1d654caf77d2ec005bc52, type: 3}
+  m_Name: High_Ground
+  m_EditorClassIdentifier: 
+  Obstacle: {fileID: 5927159478144087916, guid: 2c0c5d20eb71202479e4110c510eb903, type: 3}
+  ObstacleSpawnPoints:
+  - {x: 0.25, y: 0.25}
+  - {x: 0, y: 0.25}
+  - {x: -0.25, y: 0.25}
+  Pickup: {fileID: 173740097663670227, guid: 068e6559e55b6664e9aeb6374e5aa48b, type: 3}
+  PickupSpawnPoints:
+  - {x: 0.35, y: 0.7}
+  - {x: 0.55, y: 0}
+  GroundPrefab: {fileID: 5526499935218365668, guid: 37bea043cf235254d95bbdf095bc6cce, type: 3}
+  Probability: 0
+  Weight: 0

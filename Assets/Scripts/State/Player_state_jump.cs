@@ -34,6 +34,7 @@ public class Player_state_jump : Player_base_state
         else
         {
             player.LockJump();
+            player.ApplyGravity();
         }
         if (isFalloff)
         {

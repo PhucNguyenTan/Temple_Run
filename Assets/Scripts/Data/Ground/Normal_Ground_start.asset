@@ -10,11 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 396dd2fc85a1d654caf77d2ec005bc52, type: 3}
-  m_Name: High_Ground
+  m_Name: Normal_Ground_start
   m_EditorClassIdentifier: 
-  ObstacleTypes:
-  - {fileID: 6128858171722335374, guid: 03342240351156446985d9cf6084f188, type: 3}
-  - {fileID: 8023175521096337249, guid: 953838423be5700439658e20315d809d, type: 3}
-  GroundPrefab: {fileID: 5526499935218365668, guid: 37bea043cf235254d95bbdf095bc6cce, type: 3}
-  Level: 0
-  ShowObstacle: 0
+  Obstacle: {fileID: 0}
+  ObstacleSpawnPoints:
+  - {x: 0.25, y: 0.1}
+  - {x: 0, y: 0.1}
+  - {x: -0.25, y: 0.1}
+  Pickup: {fileID: 0}
+  PickupSpawnPoints:
+  - {x: 0.15, y: 0.8}
+  - {x: 0.4, y: 0}
+  GroundPrefab: {fileID: 8637394940246997598, guid: 7e4d11a18f4f49446a6e905eef73cf5a, type: 3}
+  Probability: 0
+  Weight: 0

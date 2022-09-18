@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 396dd2fc85a1d654caf77d2ec005bc52, type: 3}
   m_Name: Side_Ground
   m_EditorClassIdentifier: 
-  ObstacleTypes:
-  - {fileID: 6128858171722335374, guid: 03342240351156446985d9cf6084f188, type: 3}
+  Obstacle: {fileID: 3084961307838960599, guid: f5f22cf97c8e4a1428a5e0382d578aa2, type: 3}
+  ObstacleSpawnPoints:
+  - {x: 0.25, y: 0.2}
+  - {x: -0.25, y: 0.2}
+  Pickup: {fileID: 173740097663670227, guid: 068e6559e55b6664e9aeb6374e5aa48b, type: 3}
+  PickupSpawnPoints:
+  - {x: 0, y: 0.3}
+  - {x: 0.4, y: 0}
   GroundPrefab: {fileID: 4546440668273500025, guid: 6b4166bc97b82cd4b87c2d2822de0b46, type: 3}
-  Level: 0
-  ShowObstacle: 0
+  Probability: 0
+  Weight: 0

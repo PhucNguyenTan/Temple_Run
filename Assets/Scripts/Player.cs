@@ -93,18 +93,22 @@ public class Player : MonoBehaviour
         switch (state)  
         {
             case GameManager.GameState.CountDown:
+                UnSubcribetoInputHandler();
                 InitializePlayer();
                 isPause = true;
                 break;
             case GameManager.GameState.Run:
                 isPause = false;
+                SubscibetoInputHandler();
                 pStateMachine.Initialize(stateNoSwipe);
                 break;
             case GameManager.GameState.Pause:
                 isPause = true;
+                UnSubcribetoInputHandler();
                 break;
             case GameManager.GameState.End:
                 isPause = true;
+                UnSubcribetoInputHandler();
                 break;
             default:
                 throw new Exception("Something wrong, Patrick?");
@@ -116,9 +120,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         pStateMachine.Initialize(stateNoSwipe);
-        SubLeftRight();
-        SubDown();
-        SubUp();
         GameManager.OnStateChange   += GameManagerOnStateChanged;
     }
 
@@ -130,52 +131,28 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        
-    }
 
     private void OnDisable()
     {
-        UnSubLeftRight();
-        UnSubDown();
-        UnSubUp();
+        UnSubcribetoInputHandler();
         GameManager.OnStateChange   -= GameManagerOnStateChanged;
     }
 
     #region Sub wrapper
-    public void UnSubLeftRight()
-    {
-        InputHandler.Instance.Left.RemoveListener(PlayerMoveLeft);
-        InputHandler.Instance.Right.RemoveListener(PlayerMoveRight);
-    }
 
-    public void UnSubUp()
+    public void SubscibetoInputHandler()
     {
-        InputHandler.Instance.Up.RemoveListener(PlayerJump);
-    }
-
-    public void UnSubDown()
-    {
-        InputHandler.Instance.Down.RemoveListener(PlayerRoll);
-    }
-
-    public void SubLeftRight()
-    {
+        InputHandler.Instance.Up.AddListener(PlayerJump);
+        InputHandler.Instance.Down.AddListener(PlayerRoll);
         InputHandler.Instance.Left.AddListener(PlayerMoveLeft);
         InputHandler.Instance.Right.AddListener(PlayerMoveRight);
     }
-
-    public void SubUp()
+    public void UnSubcribetoInputHandler()
     {
-        //InputHandler.Instance._input.Player.Up.performed += PlayerJumptest;
-        InputHandler.Instance.Up.AddListener(PlayerJump);
-
-    }
-
-    public void SubDown()
-    {
-        InputHandler.Instance.Down.AddListener(PlayerRoll);
+        InputHandler.Instance.Up.RemoveListener(PlayerJump);
+        InputHandler.Instance.Down.RemoveListener(PlayerRoll);
+        InputHandler.Instance.Left.RemoveListener(PlayerMoveLeft);
+        InputHandler.Instance.Right.RemoveListener(PlayerMoveRight);
     }
     #endregion
 
@@ -385,7 +362,11 @@ public class Player : MonoBehaviour
             Destroy(other.gameObject);
             AddHealth(10f);
             OnPickupHealth?.Invoke();
-
+        }
+        else if(other.CompareTag("Ground"))
+        {
+            if(_v_force <= 0f)
+                TakeDamage(Health);
         }
     }
     #endregion
