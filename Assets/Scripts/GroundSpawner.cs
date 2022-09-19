@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GroundSpawner : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GroundSpawner : MonoBehaviour
     [SerializeField] Vector3 _nextSpawnPoint = Vector3.zero;
     [SerializeField] int _tileLimit = 10;
     [SerializeField] int _maxLevel = 10;
+    [SerializeField] ScoreManager _scoreManager;
 
     [SerializeField] Ground_data _startGround;
     [SerializeField] List<Ground_data> _easyGrounds;
@@ -24,14 +26,27 @@ public class GroundSpawner : MonoBehaviour
     int _groundCount;
     int _currentLevel;
     int _lastLevel;
-
     List<GroundType> listGround = new List<GroundType>();
+
+    public UnityAction OnRemoveGround;
     
     public bool isPause { get; private set; } = false;
 
     private void Awake()
     {
         GameManager.OnStateChange += GameManager_OnStateChange;
+    }
+
+    private void OnEnable()
+    {
+        _scoreManager.OnLevelUp += LevelUp;
+        _scoreManager.OnLevelDown += LevelDown;
+    }
+
+    private void OnDisable()
+    {
+        _scoreManager.OnLevelDown -= LevelDown;
+        _scoreManager.OnLevelUp -= LevelUp;
     }
 
     private void OnDestroy()
@@ -65,33 +80,38 @@ public class GroundSpawner : MonoBehaviour
     {
         if (!isPause)
         {
-            CheckLevelUp();
+            //CheckLevelUp();
             CreateNextGround();
         }
         
     }
 
-    void CheckLevelUp()
+    void LevelUp(int level)
     {
-        if (_currentLevel >= _maxLevel) return;
+        _groundSpeed += _speedPerLevel;
+        LevelChange(level);
+    }
 
-        _currentLevel = _groundCount / _incremetal;
-        if (_lastLevel < _currentLevel)
+    void LevelDown(int level)
+    {
+        _groundSpeed -= _speedPerLevel;
+        LevelChange(level);
+    }
+
+    void LevelChange(int level)
+    {
+        SpeedUp();
+        if (level < 3)
         {
-            _lastLevel = _currentLevel;
-            _groundSpeed += _speedPerLevel;
-            SpeedUp();
-            if (_currentLevel > 3)
-            {
-                _disallowedGrounds.Clear();
-                _allowedGrounds.Clear();
-                _allowedGrounds.AddRange(_normalGrounds);
-            }
-            //else if (_currentLevel > 7) {
-            //    _disallowedGrounds.Clear();
-            //    _allowedGrounds.Clear();
-            //    _allowedGrounds.AddRange(_hardGrounds);
-            //}
+            _disallowedGrounds.Clear();
+            _allowedGrounds.Clear();
+            _allowedGrounds.AddRange(_easyGrounds);
+        }
+        else if(level < 7)
+        {
+            _disallowedGrounds.Clear();
+            _allowedGrounds.Clear();
+            _allowedGrounds.AddRange(_normalGrounds);
         }
     }
 
@@ -215,6 +235,7 @@ public class GroundSpawner : MonoBehaviour
         {
             RemoveFirstInList();
             Destroy(other.gameObject);
+            OnRemoveGround?.Invoke();
         }
     }
 }

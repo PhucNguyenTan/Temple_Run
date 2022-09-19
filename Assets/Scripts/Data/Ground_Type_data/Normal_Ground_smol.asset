@@ -20,7 +20,7 @@ MonoBehaviour:
   Pickup: {fileID: 173740097663670227, guid: 068e6559e55b6664e9aeb6374e5aa48b, type: 3}
   PickupSpawnPoints:
   - {x: 0.15, y: 0.8}
-  - {x: 0.3, y: 0}
+  - {x: 0.4, y: 0}
   GroundPrefab: {fileID: 8637394940246997598, guid: 7e4d11a18f4f49446a6e905eef73cf5a, type: 3}
   Probability: 0
   Weight: 0

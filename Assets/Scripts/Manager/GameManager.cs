@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        OnStateChange?.Invoke(newState); // "?" is to determine if anyone subscribe 
+        OnStateChange?.Invoke(newState); // !!! "?" is to determine if anyone subscribe 
     }
 
     public enum GameState

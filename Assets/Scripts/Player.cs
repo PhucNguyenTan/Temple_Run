@@ -60,7 +60,6 @@ public class Player : MonoBehaviour
     public UnityAction OnPickupHealth;
     #endregion
 
-    private bool redDare_touched = false;
 
     #region Buffering variable
     public float CoyoteTimeCounter { get; private set; }
@@ -79,6 +78,9 @@ public class Player : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         CanCheckGrounded = true;
         SetJumpVar();
+
+        GameManager.OnStateChange += GameManagerOnStateChanged;
+        pStateMachine.Initialize(stateNoSwipe);
 
     }
 
@@ -119,8 +121,6 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        pStateMachine.Initialize(stateNoSwipe);
-        GameManager.OnStateChange   += GameManagerOnStateChanged;
     }
 
     void Update()
@@ -333,10 +333,12 @@ public class Player : MonoBehaviour
     {
         Health = data.MaxHealth;
         ingameUI.SetHealthValue(Health);
-        //pStateMachine.ChangeState(stateNoSwipe); Should probably check why this doesn't work
+        pStateMachine.ChangeState(stateJump); // Should probably check why this doesn't work
         transform.position = new Vector3(0f, 0.432f, 0f);
         CurrentLane = data.laneMid;
+
     }
+
 
     #region Other Object collision
     private void OnTriggerEnter(Collider other)
@@ -367,6 +369,11 @@ public class Player : MonoBehaviour
         {
             if(_v_force <= 0f)
                 TakeDamage(Health);
+        }
+        else if (other.CompareTag("Coin"))
+        {
+            OnPickupCoin?.Invoke();
+            Destroy(other.gameObject);
         }
     }
     #endregion
