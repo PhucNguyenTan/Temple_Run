@@ -7,17 +7,15 @@ public class GroundSpawner : MonoBehaviour
 {
     [SerializeField] GroundType _ground;
     [SerializeField] Vector3 _nextSpawnPoint = Vector3.zero;
-    [SerializeField] int _tileLimit = 10;
-    [SerializeField] int _maxLevel = 10;
     [SerializeField] ScoreManager _scoreManager;
+    [SerializeField] int _tileLimit = 10;
 
     [SerializeField] Ground_data _startGround;
     [SerializeField] List<Ground_data> _easyGrounds;
     [SerializeField] List<Ground_data> _normalGrounds;
     [SerializeField] List<Ground_data> _hardGrounds;
-
     [SerializeField] float _speedPerLevel;
-    [SerializeField] int _incremetal = 10;
+
     [SerializeField] float _groundSpeed = 2.0f;
     GroundType _currentGround;
 
@@ -112,6 +110,12 @@ public class GroundSpawner : MonoBehaviour
             _disallowedGrounds.Clear();
             _allowedGrounds.Clear();
             _allowedGrounds.AddRange(_normalGrounds);
+        }
+        else
+        {
+            _disallowedGrounds.Clear();
+            _allowedGrounds.Clear();
+            _allowedGrounds.AddRange(_hardGrounds);
         }
     }
 

@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Obstacle: {fileID: 3084961307838960599, guid: f5f22cf97c8e4a1428a5e0382d578aa2, type: 3}
   ObstacleSpawnPoints:
-  - {x: 0.25, y: 0.2}
-  - {x: -0.25, y: 0.2}
+  - {x: 0.25, y: 0.25}
+  - {x: -0.25, y: 0.25}
   Pickup: {fileID: 173740097663670227, guid: 068e6559e55b6664e9aeb6374e5aa48b, type: 3}
   PickupSpawnPoints:
   - {x: 0, y: 0.3}
-  - {x: 0.4, y: 0}
+  - {x: 0.55, y: 0}
   GroundPrefab: {fileID: 4546440668273500025, guid: 6b4166bc97b82cd4b87c2d2822de0b46, type: 3}
   Probability: 0
   Weight: 0

@@ -1787,6 +1787,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _hardGrounds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: _normalGrounds.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -1801,7 +1805,7 @@ PrefabInstance:
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: _easyGrounds.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 374f7af50c5710a4aa9dbd6054814268, type: 2}
+      objectReference: {fileID: 11400000, guid: a6f72f21567b76f4394b319ac10e0a81, type: 2}
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: _groundDatas.Array.data[0]
       value: 
@@ -1811,13 +1815,29 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 80f56e7499d79084db0225b348bfea5d, type: 2}
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _hardGrounds.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 272c726e0857ed14e9691b1b5b50c3da, type: 2}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _hardGrounds.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 80f56e7499d79084db0225b348bfea5d, type: 2}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _hardGrounds.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 35293e11fa7994e44826322539fd87cc, type: 2}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
+      propertyPath: _hardGrounds.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 374f7af50c5710a4aa9dbd6054814268, type: 2}
+    - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: _normalGrounds.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 272c726e0857ed14e9691b1b5b50c3da, type: 2}
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: _normalGrounds.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 35293e11fa7994e44826322539fd87cc, type: 2}
+      objectReference: {fileID: 11400000, guid: a6f72f21567b76f4394b319ac10e0a81, type: 2}
     - target: {fileID: 5030180425957794280, guid: a5d2b0ab428e2674c81cb433010b126f, type: 3}
       propertyPath: _normalGrounds.Array.data[2]
       value: 
