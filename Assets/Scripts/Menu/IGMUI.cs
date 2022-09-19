@@ -15,6 +15,7 @@ public class IGMUI : MonoBehaviour
     [SerializeField] GameObject _retryMenuUI;
     [SerializeField] GameObject _countDownUI;
     [SerializeField] ScoreManager _scoreManager;
+    [SerializeField] Player_data _playerData;
 
     [SerializeField] int CountDown = 3;
     int CountDownDisplay;
@@ -23,9 +24,11 @@ public class IGMUI : MonoBehaviour
     GameObject _countDownTextObj;
     //private Panel RetryMenu;
     Slider _healthSlider;
+    Image _healthBar;
     TextMeshProUGUI _scoreText;
     TextMeshProUGUI _levelText;
     TextMeshProUGUI _coinText;
+    Button _pauseBtn;
 
     public InputHandler controlInput { get; private set; }
 
@@ -35,10 +38,11 @@ public class IGMUI : MonoBehaviour
         GameManager.OnStateChange += GameManager_OnStateChange;
         _countDownTextObj = transform.Find("CountDown").gameObject;
         _countdownText = _countDownTextObj.GetComponent<TextMeshProUGUI>();
-        _healthSlider = transform.Find("Health").gameObject.GetComponent<Slider>();
+        _healthBar = transform.Find("HealthBar").gameObject.GetComponent<Image>();
         _scoreText = transform.Find("Score_label").gameObject.GetComponent<TextMeshProUGUI>();
         _coinText = transform.Find("Coin").gameObject.GetComponent<TextMeshProUGUI>();
         _levelText = transform.Find("Level").gameObject.GetComponent<TextMeshProUGUI>();
+        _pauseBtn = transform.Find("PauseBtn").gameObject.GetComponent<Button>();
         //RetryMenu = transform.Find("RetryIGM").gameObject.GetComponent<Panel>();
     }
 
@@ -55,6 +59,7 @@ public class IGMUI : MonoBehaviour
         {
             case GameManager.GameState.CountDown:
                 InitializeIGMUI();
+                _pauseBtn.gameObject.SetActive(false);
                 //StartCoroutine(CountingDown());
                 CountingDown();
                 break;
@@ -62,10 +67,12 @@ public class IGMUI : MonoBehaviour
                 InputHandler.Instance.Pause.AddListener(HandlePressingPause);
                 break;
             case GameManager.GameState.Run:
+                _pauseBtn.gameObject.SetActive(true);
                 InputHandler.Instance.Pause.AddListener(HandlePressingPause);
 
                 break;
             case GameManager.GameState.End:
+                _pauseBtn.gameObject.SetActive(false);
                 InputHandler.Instance.Pause.RemoveAllListeners();
                 _retryMenuUI.SetActive(true);
                 break;
@@ -132,13 +139,16 @@ public class IGMUI : MonoBehaviour
 
     public void Pause() {
         _pauseMenuUI.SetActive(true);
+        _pauseBtn.gameObject.SetActive(false);
         GameManager.UpdateGameState(GameManager.GameState.Pause);
         isPause = true;
+
 
     }
 
     public void Resume()
     {
+        _pauseBtn.gameObject.SetActive(true);
         _pauseMenuUI.SetActive(false);
         GameManager.UpdateGameState(GameManager.GameState.Run);
         isPause = false;
@@ -186,7 +196,8 @@ public class IGMUI : MonoBehaviour
 
     public void SetHealthValue(float health)
     {
-        _healthSlider.value = health;
+        float healthPercent = health/_playerData.MaxHealth;
+        _healthBar.fillAmount = healthPercent;
     }
 
     public void RetryEndless()

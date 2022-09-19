@@ -9,6 +9,8 @@ public class Player_data : ScriptableObject
     [Header("Jump")]
     public float maxJumpTime = 1.0f;
     public float maxJumpHeight = 0.3f;
+    public float maxDropTime;
+    public float maxDropHeight;
 
     [Header("Buffering")]
     public float CoyoteTime;

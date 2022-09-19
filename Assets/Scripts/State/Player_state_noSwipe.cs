@@ -28,7 +28,7 @@ public class Player_state_noSwipe : Player_base_state
         {
             stateMachine.ChangeState(player.stateSwiping);
         }
-        if (!player.IsGrounded())
+        if (!player.IsGrounded)
         {
             stateMachine.ChangeState(player.stateJump);
         }

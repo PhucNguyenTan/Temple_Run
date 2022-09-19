@@ -24,9 +24,8 @@ public class Player_state_airSwipe : Player_base_state
     {
         base.LogicUpdate();
         bool isSwiping = player.IsSwiping();
-        bool isGrounded = player.IsGrounded();
 
-        if (isGrounded)
+        if (player.IsGrounded)
         {
             SoundManager.Instance.PlayEffectRandomOnce(data.LandAudio);
             if (isSwiping)

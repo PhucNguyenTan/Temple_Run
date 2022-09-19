@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
 
     bool _canJump;
     bool _canSwipe;
+    public bool IsGrounded { get; private set; }
 
     [SerializeField] float _timeToSwipe;
     [SerializeField] IGMUI ingameUI;
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour
         control = GetComponent<CharacterController>();
         boxCollider = GetComponent<BoxCollider>();
         CanCheckGrounded = true;
-        SetJumpVar();
+        SetJumpVar(data.maxJumpTime, data.maxJumpHeight);
 
         GameManager.OnStateChange += GameManagerOnStateChanged;
         pStateMachine.Initialize(stateNoSwipe);
@@ -127,6 +128,7 @@ public class Player : MonoBehaviour
     {
         if (!isPause)
         {
+            IsGrounded = CheckGrounded();
             pStateMachine.currentState.LogicUpdate();
         }
     }
@@ -143,14 +145,14 @@ public class Player : MonoBehaviour
     public void SubscibetoInputHandler()
     {
         InputHandler.Instance.Up.AddListener(PlayerJump);
-        InputHandler.Instance.Down.AddListener(PlayerRoll);
+        InputHandler.Instance.Down.AddListener(PlayerInputDown);
         InputHandler.Instance.Left.AddListener(PlayerMoveLeft);
         InputHandler.Instance.Right.AddListener(PlayerMoveRight);
     }
     public void UnSubcribetoInputHandler()
     {
         InputHandler.Instance.Up.RemoveListener(PlayerJump);
-        InputHandler.Instance.Down.RemoveListener(PlayerRoll);
+        InputHandler.Instance.Down.RemoveListener(PlayerInputDown);
         InputHandler.Instance.Left.RemoveListener(PlayerMoveLeft);
         InputHandler.Instance.Right.RemoveListener(PlayerMoveRight);
     }
@@ -173,7 +175,7 @@ public class Player : MonoBehaviour
         transform.position = move;
     }
 
-    public bool IsGrounded()
+    public bool CheckGrounded()
     {
         if (!CanCheckGrounded)
         {
@@ -208,6 +210,8 @@ public class Player : MonoBehaviour
             timerRatio = 1f;
         _h_current = Mathf.Lerp(PrevLane, CurrentLane, timerRatio);
     }
+
+    
     public bool IsSwiping()
     {
         if (transform.position.x != CurrentLane)
@@ -240,6 +244,14 @@ public class Player : MonoBehaviour
         }
     }
 
+    void PlayerInputDown()
+    {
+        if (!IsGrounded)
+        {
+            SetJumpVar(data.maxDropTime, data.maxDropHeight);
+        }
+    }
+
     public void AddJumpForce()
     {
         _v_force = _initialJumpVelocity;
@@ -247,11 +259,11 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public void SetJumpVar()
+    public void SetJumpVar(float maxTime, float maxHeight)
     {
-        float timeToApex = data.maxJumpTime * .5f;
-        _gravity = (-2 * data.maxJumpHeight) / (timeToApex * timeToApex);
-        _initialJumpVelocity = 2 * data.maxJumpHeight / timeToApex;
+        float timeToApex = maxTime * .5f;
+        _gravity = (-2 * maxHeight) / (timeToApex * timeToApex);
+        _initialJumpVelocity = 2 * maxHeight / timeToApex;
     }
 
 
@@ -267,7 +279,7 @@ public class Player : MonoBehaviour
         waitBeforeCheckGround(0.1f);
         CoyoteTimeCounter = 0f;
         SoundManager.Instance.PlayEffectRandomOnce(data.JumpAudio);
-        SetJumpVar();
+        SetJumpVar(data.maxJumpTime, data.maxJumpHeight);
         AddJumpForce();
     }
 
@@ -334,7 +346,7 @@ public class Player : MonoBehaviour
         Health = data.MaxHealth;
         ingameUI.SetHealthValue(Health);
         pStateMachine.ChangeState(stateJump); // Should probably check why this doesn't work
-        transform.position = new Vector3(0f, 0.432f, 0f);
+        transform.position = new Vector3(0f, 0.45f, 0f);
         CurrentLane = data.laneMid;
 
     }

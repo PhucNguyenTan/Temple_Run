@@ -24,7 +24,6 @@ public class Player_state_jump : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        bool isGrounded = player.IsGrounded();
         bool isSwiping = player.IsSwiping();
         bool isFalloff = player.IsFallOff();
         if(player.CoyoteTimeCounter > 0f)
@@ -41,7 +40,7 @@ public class Player_state_jump : Player_base_state
             SoundManager.Instance.PlayEffectRandomOnce(data.FallOffAudio);
             player.TakeDamage(player.Health);
         }
-        if (isGrounded)
+        if (player.IsGrounded)
         {
             SoundManager.Instance.PlayEffectRandomOnce(data.LandAudio);
             if(isSwiping)
