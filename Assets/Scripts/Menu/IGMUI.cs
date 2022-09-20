@@ -23,8 +23,8 @@ public class IGMUI : MonoBehaviour
 
     GameObject _countDownTextObj;
     //private Panel RetryMenu;
-    Slider _healthSlider;
     Image _healthBar;
+    Image _healthBarBackGround;
     TextMeshProUGUI _scoreText;
     TextMeshProUGUI _levelText;
     TextMeshProUGUI _coinText;
@@ -43,6 +43,7 @@ public class IGMUI : MonoBehaviour
         _coinText = transform.Find("Coin").gameObject.GetComponent<TextMeshProUGUI>();
         _levelText = transform.Find("Level").gameObject.GetComponent<TextMeshProUGUI>();
         _pauseBtn = transform.Find("PauseBtn").gameObject.GetComponent<Button>();
+        _healthBarBackGround = transform.Find("Health_background").gameObject.GetComponent<Image>();
         //RetryMenu = transform.Find("RetryIGM").gameObject.GetComponent<Panel>();
     }
 
@@ -60,18 +61,22 @@ public class IGMUI : MonoBehaviour
             case GameManager.GameState.CountDown:
                 InitializeIGMUI();
                 _pauseBtn.gameObject.SetActive(false);
+                SetActiveGameGUi(false);
                 //StartCoroutine(CountingDown());
                 CountingDown();
                 break;
             case GameManager.GameState.Pause:
+                SetActiveGameGUi(false);
                 InputHandler.Instance.Pause.AddListener(HandlePressingPause);
                 break;
             case GameManager.GameState.Run:
+                SetActiveGameGUi(true);
                 _pauseBtn.gameObject.SetActive(true);
                 InputHandler.Instance.Pause.AddListener(HandlePressingPause);
 
                 break;
             case GameManager.GameState.End:
+                SetActiveGameGUi(false);
                 _pauseBtn.gameObject.SetActive(false);
                 InputHandler.Instance.Pause.RemoveAllListeners();
                 _retryMenuUI.SetActive(true);
@@ -212,5 +217,16 @@ public class IGMUI : MonoBehaviour
         _countDownUI.SetActive(true);
         CountDownDisplay = 3;
     } 
+
+    void SetActiveGameGUi(bool isActive)
+    {
+        _healthBar.gameObject.SetActive(isActive);
+        _scoreText.gameObject.SetActive(isActive);
+        _levelText.gameObject.SetActive(isActive);
+        _coinText.gameObject.SetActive(isActive);
+        _healthBarBackGround.gameObject.SetActive(isActive);
+
+    }
+
 
 }

@@ -24,7 +24,7 @@ public class Player_state_noSwipe : Player_base_state
     {
         base.LogicUpdate();
         
-        if (player.IsSwiping())
+        if (player.CheckSwiping())
         {
             stateMachine.ChangeState(player.stateSwiping);
         }

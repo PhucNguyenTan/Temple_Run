@@ -26,12 +26,14 @@ public class GameCamera : MonoBehaviour
     {
         _player.OnObstacleCollided += CameraShake;
         _player.OnBigObstacleCollided += CameraShakeBig;
+        _player.OnCrashToGround += CameraShakeBigger;
     }
 
     private void OnDisable()
     {
         _player.OnBigObstacleCollided -= CameraShakeBig;
         _player.OnObstacleCollided -= CameraShake;
+        _player.OnCrashToGround -= CameraShakeBigger;
     }
 
     public void CameraShake()
@@ -42,6 +44,12 @@ public class GameCamera : MonoBehaviour
     public void CameraShakeBig()
     {
         CameraShaker.Instance.ShakeOnce(_shakeMagniture * 1.5f, _shakeRange * 1.5f , _shakeFadeIn, _shakeFadeOut);
+
+    }
+
+    public void CameraShakeBigger()
+    {
+        CameraShaker.Instance.ShakeOnce(_shakeMagniture * 2f, _shakeRange * 2f, _shakeFadeIn*1.5f, _shakeFadeOut*1.5f);
 
     }
 }

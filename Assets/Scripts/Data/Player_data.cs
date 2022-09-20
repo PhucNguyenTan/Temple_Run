@@ -12,6 +12,9 @@ public class Player_data : ScriptableObject
     public float maxDropTime;
     public float maxDropHeight;
 
+    [Header("Special")]
+    public float InvulPeriod;
+
     [Header("Buffering")]
     public float CoyoteTime;
          
@@ -40,6 +43,10 @@ public class Player_data : ScriptableObject
     public AudioClip[] CollidingAudio;
     public AudioClip[] FallOffAudio;
     public AudioClip[] CollidingBig;
+    public AudioClip[] FastFallAudio;
+    public AudioClip[] CoinGetAudio;
+    public AudioClip[] HealthGetAudio;
+    public AudioClip[] CrashAudio;
 
     [Header("Debug")]
     public bool IsShowStatesName;

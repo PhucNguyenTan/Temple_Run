@@ -18,6 +18,7 @@ MonoBehaviour:
   maxJumpHeight: 0.3
   maxDropTime: 0.7
   maxDropHeight: 1
+  InvulPeriod: 5
   CoyoteTime: 0.1
   laneMid: 0
   laneLeft: -0.25
@@ -52,4 +53,12 @@ MonoBehaviour:
   FallOffAudio:
   - {fileID: 8300000, guid: 522196d564c0e674da1281cc2092eecf, type: 3}
   CollidingBig: []
+  FastFallAudio: []
+  CoinGetAudio:
+  - {fileID: 8300000, guid: e37a4f82686f774418349cfcde955503, type: 3}
+  HealthGetAudio:
+  - {fileID: 8300000, guid: 5be1ac8d6bf22704bba472fa8ee82d62, type: 3}
+  - {fileID: 8300000, guid: c447f7ae60f21c240b60a5fe20dbf546, type: 3}
+  CrashAudio:
+  - {fileID: 8300000, guid: 6350fd7a7e86bca488d227cda2e5f13c, type: 3}
   IsShowStatesName: 1

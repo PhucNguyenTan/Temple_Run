@@ -18,7 +18,8 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Components
-    BoxCollider boxCollider;
+    BoxCollider _boxCollider;
+    MeshRenderer _render;
     public CharacterController control { get; private set; }
     #endregion
 
@@ -59,12 +60,22 @@ public class Player : MonoBehaviour
     public UnityAction OnBigObstacleCollided;
     public UnityAction OnPickupCoin;
     public UnityAction OnPickupHealth;
+    public UnityAction OnCrashToGround;
     #endregion
 
 
     #region Buffering variable
     public float CoyoteTimeCounter { get; private set; }
     #endregion
+
+    float invulTimer = 0f;
+    bool isInvul = false;
+
+    float time = 5.0f;
+    float maxInterval = 1.2f;
+    float minInterval = 0.2f;
+    float interval = 1.0f;
+    float timer = 5.0f;
 
     private void Awake()
     {
@@ -76,7 +87,8 @@ public class Player : MonoBehaviour
         stateAirSwiping = new Player_state_airSwipe(this, pStateMachine, data, "airSwipe");
 
         control = GetComponent<CharacterController>();
-        boxCollider = GetComponent<BoxCollider>();
+        _render = GetComponent<MeshRenderer>();
+        _boxCollider = GetComponent<BoxCollider>();
         CanCheckGrounded = true;
         SetJumpVar(data.maxJumpTime, data.maxJumpHeight);
 
@@ -130,6 +142,8 @@ public class Player : MonoBehaviour
         {
             IsGrounded = CheckGrounded();
             pStateMachine.currentState.LogicUpdate();
+            if (isInvul)
+                GoInvulnerable();
         }
     }
 
@@ -212,7 +226,7 @@ public class Player : MonoBehaviour
     }
 
     
-    public bool IsSwiping()
+    public bool CheckSwiping()
     {
         if (transform.position.x != CurrentLane)
             return true;
@@ -358,33 +372,59 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("redbox"))
         {
+            if (isInvul) return;
             OnObstacleCollided?.Invoke();
-            Destroy(other.gameObject);
-            SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
+            isInvul = true;
+            timer = time;
             TakeDamage(10f);
+            if (Health > 0)
+            {
+                SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                SoundManager.Instance.PlayEffectOnce(data.CrashAudio[0]);
+            }
         }
 
         else if (other.CompareTag("bigRedbox"))
         {
-            Destroy(other.gameObject);
+            if (isInvul) return;
             OnBigObstacleCollided?.Invoke();
-            SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
             TakeDamage(20f);
+            if (Health > 0)
+            {
+                SoundManager.Instance.PlayEffectRandomOnce(data.CollidingAudio);
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                SoundManager.Instance.PlayEffectOnce(data.CrashAudio[0]);
+            }
         }
+        
         else if (other.CompareTag("Health"))
         {
             Destroy(other.gameObject);
+            SoundManager.Instance.PlayEffectRandomOnce(data.HealthGetAudio);
             AddHealth(10f);
             OnPickupHealth?.Invoke();
         }
+
         else if(other.CompareTag("Ground"))
         {
-            if(_v_force <= 0f)
+            if (_v_force <= 0f)
+            {
+                SoundManager.Instance.PlayEffectOnce(data.CrashAudio[0]);
                 TakeDamage(Health);
+                OnCrashToGround?.Invoke();
+            }
         }
         else if (other.CompareTag("Coin"))
         {
             OnPickupCoin?.Invoke();
+            SoundManager.Instance.PlayEffectRandomOnce(data.CoinGetAudio);
             Destroy(other.gameObject);
         }
     }
@@ -403,7 +443,7 @@ public class Player : MonoBehaviour
     }
 
 
-    public bool IsFallOff()
+    public bool CheckFallOff()
     {
         if(transform.position.y < 0)
         {
@@ -412,4 +452,18 @@ public class Player : MonoBehaviour
         return false;
     }
 
+    void GoInvulnerable()
+    {
+       
+        interval = minInterval + timer / time * (maxInterval - minInterval);
+        timer -= Time.deltaTime;
+        if (timer < 0.0f)
+        {
+            timer = 0f;
+            isInvul = false;
+            _render.enabled = true;
+            return;
+        }
+        _render.enabled = Mathf.PingPong(Time.time, interval) > (interval / 2.0f);
+    }
 }

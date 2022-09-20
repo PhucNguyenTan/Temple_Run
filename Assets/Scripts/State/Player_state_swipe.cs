@@ -23,7 +23,7 @@ public class Player_state_swipe : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (!player.IsSwiping())
+        if (!player.CheckSwiping())
         {
             stateMachine.ChangeState(player.stateNoSwipe);
         }

@@ -23,7 +23,7 @@ public class Player_state_airSwipe : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        bool isSwiping = player.IsSwiping();
+        bool isSwiping = player.CheckSwiping();
 
         if (player.IsGrounded)
         {

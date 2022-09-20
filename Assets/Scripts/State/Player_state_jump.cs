@@ -24,8 +24,8 @@ public class Player_state_jump : Player_base_state
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        bool isSwiping = player.IsSwiping();
-        bool isFalloff = player.IsFallOff();
+        bool isSwiping = player.CheckSwiping();
+        bool isFalloff = player.CheckFallOff();
         if(player.CoyoteTimeCounter > 0f)
         {
              player.UnlockJump();
