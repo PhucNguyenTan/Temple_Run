@@ -62,12 +62,16 @@ public class GroundSpawner : MonoBehaviour
                 break;
             case GameManager.GameState.Pause:
                 PauseScrolling();
+                isPause = true;
+
                 break;
             case GameManager.GameState.Run:
                 UnPauseScrolling();
+                isPause = false;
                 break;
             case GameManager.GameState.End:
                 PauseScrolling();
+                isPause = true;
                 break;
         }
     }

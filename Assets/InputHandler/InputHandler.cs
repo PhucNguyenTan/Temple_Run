@@ -84,6 +84,8 @@ public class InputHandler : MonoBehaviour
             Left?.Invoke();
         else if (Vector2.Dot(Vector2.right, direction) > _directionThreshold)
             Right?.Invoke();
+        else if (Vector2.Dot(Vector2.down, direction) > _directionThreshold)
+            Down?.Invoke();
     }
 
     private void OnDisable()
