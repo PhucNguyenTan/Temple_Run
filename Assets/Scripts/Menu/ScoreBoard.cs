@@ -27,7 +27,7 @@ namespace ScoreBoard
 
         void UpdateScoreboardUI(ScoreBoardSaveData saveData)
         {
-            RemoveScoreOnUI();
+            RemoveItemOnUI();
             if (saveData == null) return;
             if (saveData.entries.Count < 1) return;
             saveData.SortEntries_Score();
@@ -52,7 +52,7 @@ namespace ScoreBoard
             }
         }
 
-        void RemoveScoreOnUI()
+        void RemoveItemOnUI()
         {
             if(transform.childCount > 0)
             {
@@ -69,6 +69,12 @@ namespace ScoreBoard
             string jsonString = PlayerPrefs.GetString("SavedScore");
             entriesSaved = JsonUtility.FromJson<ScoreBoardSaveData>(jsonString);
             return entriesSaved;
+        }
+
+        public void DeleteSavedData()
+        {
+            PlayerPrefs.SetString("SavedScore", "");
+            UpdateScoreboardUI(GetSavedData());
         }
     }
 }

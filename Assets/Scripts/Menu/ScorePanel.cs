@@ -27,7 +27,7 @@ namespace ScoreBoard
             _newCoinAmount.text = _scoreManager.CoinOwned.ToString();
             CheckNewHighScore();
             if (!_igmUI.IsSaveBtnDisabled)
-                _saveBtn.interactable = true;
+                UnlockSaveAbility();
         }
 
         
@@ -46,8 +46,7 @@ namespace ScoreBoard
             savedScore.entries.Add(entry);
             string jsonToSave = JsonUtility.ToJson(savedScore);
             PlayerPrefs.SetString("SavedScore", jsonToSave);
-            _saveBtn.interactable = false;
-            _igmUI.LockSaveAbility();
+            LockSaveAbility();
         }
 
         void CheckNewHighScore()
@@ -68,6 +67,20 @@ namespace ScoreBoard
         public void GetInputString(string strInput)
         {
             _name = strInput;
+        }
+
+        void LockSaveAbility()
+        {
+            _inputField.interactable = false;
+            _saveBtn.interactable = false;
+            _igmUI.LockSaveAbilitySignal();
+        }
+
+        void UnlockSaveAbility()
+        {
+            _inputField.interactable = true;
+            _saveBtn.interactable = true;
+            _inputField.text = "";
         }
     }
 }

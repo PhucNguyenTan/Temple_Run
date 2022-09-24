@@ -362,6 +362,9 @@ public class Player : MonoBehaviour
         pStateMachine.ChangeState(stateJump); // Should probably check why this doesn't work
         transform.position = new Vector3(0f, 0.45f, 0f);
         CurrentLane = data.laneMid;
+        isInvul = false;
+        _render.enabled = true;
+
 
     }
 
@@ -385,6 +388,8 @@ public class Player : MonoBehaviour
             else
             {
                 SoundManager.Instance.PlayEffectOnce(data.CrashAudio[0]);
+                _render.enabled = true;
+                isInvul = false;
             }
         }
 
@@ -456,7 +461,7 @@ public class Player : MonoBehaviour
     {
        
         interval = minInterval + timer / time * (maxInterval - minInterval);
-        timer -= Time.deltaTime;
+        timer -= Time.deltaTime;                                                                                                          
         if (timer < 0.0f)
         {
             timer = 0f;

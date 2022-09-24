@@ -117,7 +117,7 @@ public class IGMUI : MonoBehaviour
 
     }
 
-    public void LockSaveAbility()
+    public void LockSaveAbilitySignal()
     {
         IsSaveBtnDisabled = true;
     }
