@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -9,9 +10,16 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioSource _music;
     [SerializeField] AudioClip[] _clips;
     [SerializeField] AudioClip[] _endClips;
-    [SerializeField] float _runVol;
-    [SerializeField] float _pauseVol;
+    [SerializeField] float _gameRunVolMul;
+    [SerializeField] float _pauseVolMul;
+
+    [SerializeField] Slider _sliderMusic;
+    [SerializeField] Slider _sliderEffect;
+
+    float _currentMusicMultiplier;
     int randomNum;
+    float _currentMusicSlider = 1f;
+    float _currentEffectSlider = 1f;
 
     private void Awake()
     {
@@ -21,9 +29,25 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _currentEffectSlider = GetMusicSaved("Effect_volume");
+        _currentMusicSlider = GetMusicSaved("Music_volume");
+    }
+
+    float GetMusicSaved(string key)
+    {
+        if (!PlayerPrefs.HasKey(key))
+        {
+            return 1f;
+        }
+        return PlayerPrefs.GetFloat(key);
+    }
+
     private void OnEnable()
     {
         GameManager.OnStateChange += GameManagerOnStateChanged;
+
 
     }
 
@@ -39,15 +63,19 @@ public class SoundManager : MonoBehaviour
             case GameManager.GameState.CountDown:
                 randomNum = 0;//Random.Range(0, _clips.Length);
                 _music.loop = true;
-                _music.volume = _runVol;
+                _effect.volume = _currentEffectSlider;
+                _music.volume = _currentMusicSlider * _gameRunVolMul;
+                _currentMusicMultiplier = _gameRunVolMul;
                 _music.clip = _clips[randomNum];
                 _music.Play();
                 break;
             case GameManager.GameState.Run:
-                _music.volume = _runVol;
+                _music.volume = _currentMusicSlider * _gameRunVolMul;
+                _currentMusicMultiplier = _gameRunVolMul;
                 break;
             case GameManager.GameState.Pause:
-                _music.volume = _pauseVol;
+                _music.volume = _currentMusicSlider * _pauseVolMul;
+                _currentMusicMultiplier = _pauseVolMul;
                 break;
             case GameManager.GameState.End:
                 _music.loop = false;
@@ -56,7 +84,6 @@ public class SoundManager : MonoBehaviour
                 break;
             default:
                 throw new System.Exception("Something wrong, Patrick?");
-
         }
         //throw new NotImplementedException();
     }
@@ -69,5 +96,25 @@ public class SoundManager : MonoBehaviour
     public void PlayEffectRandomOnce(AudioClip[] clips)
     {
         _effect.PlayOneShot(clips[Random.Range(0, clips.Length)]);
+    }
+
+    public void ChangeSoundEffectVolume(float volume)
+    {
+        _effect.volume = volume;
+        _currentEffectSlider = volume;
+        PlayerPrefs.SetFloat("Effect_volume", volume);
+    }
+
+    public void ChangeMusicVolume(float volume)
+    {
+        _music.volume = volume * _currentMusicMultiplier;
+        _currentMusicSlider = volume;
+        PlayerPrefs.SetFloat("Music_volume", volume);
+    }
+
+    public void UpdateOptionUI()
+    {
+        _sliderEffect.value = _currentEffectSlider;
+        _sliderMusic.value = _currentMusicSlider;
     }
 }

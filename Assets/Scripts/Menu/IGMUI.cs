@@ -14,22 +14,23 @@ public class IGMUI : MonoBehaviour
     [SerializeField] GameObject _pauseMenuUI;
     [SerializeField] GameObject _retryMenuUI;
     [SerializeField] GameObject _countDownUI;
+    [SerializeField] GameObject _inGameUI;
     [SerializeField] ScoreManager _scoreManager;
     [SerializeField] Player_data _playerData;
 
+    [SerializeField] Image _healthBar;
+    [SerializeField] TextMeshProUGUI _scoreText;
+    [SerializeField] TextMeshProUGUI _levelText;
+    [SerializeField] TextMeshProUGUI _coinText;
+    [SerializeField] Button _pauseBtn;
+
 
     [SerializeField] int CountDown = 3;
+    [SerializeField] TextMeshProUGUI _countdownText;
     int CountDownDisplay;
-    TextMeshProUGUI _countdownText;
 
     GameObject _countDownTextObj;
     //private Panel RetryMenu;
-    Image _healthBar;
-    Image _healthBarBackGround;
-    TextMeshProUGUI _scoreText;
-    TextMeshProUGUI _levelText;
-    TextMeshProUGUI _coinText;
-    Button _pauseBtn;
 
     public bool IsSaveBtnDisabled { get; private set; }
 
@@ -39,15 +40,6 @@ public class IGMUI : MonoBehaviour
     {
         CountDownDisplay = CountDown;
         GameManager.OnStateChange += GameManager_OnStateChange;
-        _countDownTextObj = transform.Find("CountDown").gameObject;
-        _countdownText = _countDownTextObj.GetComponent<TextMeshProUGUI>();
-
-        _healthBar = transform.Find("HealthBar").gameObject.GetComponent<Image>();
-        _scoreText = transform.Find("Score_label").gameObject.GetComponent<TextMeshProUGUI>();
-        _coinText = transform.Find("Coin").gameObject.GetComponent<TextMeshProUGUI>();
-        _levelText = transform.Find("Level").gameObject.GetComponent<TextMeshProUGUI>();
-        _pauseBtn = transform.Find("PauseBtn").gameObject.GetComponent<Button>();
-        _healthBarBackGround = transform.Find("Health_background").gameObject.GetComponent<Image>();
     }
 
 
@@ -204,7 +196,7 @@ public class IGMUI : MonoBehaviour
         _countdownText.text = "GO!";
         //yield return new WaitForSeconds(1f);
         await Task.Delay(1000);
-        _countDownTextObj.SetActive(false);
+        _countdownText.gameObject.SetActive(false);
         GameManager.UpdateGameState(GameManager.GameState.Run);
     }
 
@@ -229,11 +221,7 @@ public class IGMUI : MonoBehaviour
 
     void SetActiveGameGUi(bool isActive)
     {
-        _healthBar.gameObject.SetActive(isActive);
-        _scoreText.gameObject.SetActive(isActive);
-        _levelText.gameObject.SetActive(isActive);
-        _coinText.gameObject.SetActive(isActive);
-        _healthBarBackGround.gameObject.SetActive(isActive);
+        _inGameUI.SetActive(isActive);
 
     }
 
