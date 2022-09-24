@@ -7,8 +7,6 @@ public class Player : MonoBehaviour
 {
     #region State machine
     public Player_state_machine pStateMachine { get; private set; }
-    public Player_state_swipeLeft stateSwipeL { get; private set; }
-    public Player_state_swipeRight stateSwipeR { get; private set; }
     public Player_state_noSwipe stateNoSwipe { get; private set; }
     public Player_state_dealth stateDeath { get; private set; }
     public Player_state_jump stateJump { get; private set; }
