@@ -362,6 +362,9 @@ public class Player : MonoBehaviour
         CurrentLane = data.laneMid;
         isInvul = false;
         _render.enabled = true;
+        _v_current = 0f;
+        _h_current = 0f;
+        _v_force = 0f;
 
 
     }
