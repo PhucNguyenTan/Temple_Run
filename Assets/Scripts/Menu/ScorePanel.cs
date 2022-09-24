@@ -25,13 +25,14 @@ namespace ScoreBoard
             _score = _scoreManager.Score;
             _newScore.text = _score.ToString();
             _newCoinAmount.text = _scoreManager.CoinOwned.ToString();
-            CheckNewHighScore();
+            _highScoreBanner.gameObject.SetActive(false);
+
             if (!_igmUI.IsSaveBtnDisabled)
                 UnlockSaveAbility();
+            CheckNewHighScore();
         }
 
         
-
 
         public void SaveScoreEntry()
         {
@@ -53,15 +54,18 @@ namespace ScoreBoard
         {
             string jsonString = PlayerPrefs.GetString("SavedScore");
             ScoreBoardSaveData savedScore = JsonUtility.FromJson<ScoreBoardSaveData>(jsonString);
-            if (savedScore == null) return;
-            for(var i = 0; i<savedScore.entries.Count; i++)
+            if (savedScore != null)
             {
-                if(_score <= savedScore.entries[i].entryScore)
+                for(var i = 0; i<savedScore.entries.Count; i++)
                 {
-                    return;
+                    if(_score <= savedScore.entries[i].entryScore)
+                    {
+                        return;
+                    }
                 }
+
             }
-            _newScore.gameObject.SetActive(true);
+            _highScoreBanner.gameObject.SetActive(true);
         }
 
         public void GetInputString(string strInput)
