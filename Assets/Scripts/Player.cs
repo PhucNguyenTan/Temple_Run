@@ -31,7 +31,6 @@ public class Player : MonoBehaviour
     float _y_StableGround;
     float _v_force = 0f;
     float _v_prevForce = 0f;
-    Vector3 _bottomContact;
 
     public float CurrentLane { get; private set; }
     public float PrevLane { get; private set; }
@@ -140,6 +139,7 @@ public class Player : MonoBehaviour
         {
             IsGrounded = CheckGrounded();
             pStateMachine.currentState.LogicUpdate();
+            MoveToTarget();
             if (isInvul)
                 GoInvulnerable();
         }
@@ -184,6 +184,7 @@ public class Player : MonoBehaviour
         Vector3 move = new Vector3();
         move.y = _v_current;
         move.x = _h_current;
+        Debug.Log(move.y);
         transform.position = move;
     }
 
@@ -204,7 +205,9 @@ public class Player : MonoBehaviour
             return false;
         }
 
+        //_y_StableGround = hit.transform.position.y + (hit.transform.localScale.y * 0.5f) + 0.05f;
         _y_StableGround = hit.point.y + data.GroundDectectHeight;
+        //_y_StableGround = hit.point.y;
         if (hit.distance <= data.GroundDectectHeight)
         {
             CoyoteTimeCounter = data.CoyoteTime;
@@ -254,6 +257,12 @@ public class Player : MonoBehaviour
             _v_current = _y_StableGround;
             UnApplyGravity();
         }
+    }
+
+    public void OnStableGround()
+    {
+        if(transform.position.y < _y_StableGround)
+            _v_current = _y_StableGround;
     }
 
     void PlayerInputDown()
@@ -362,13 +371,17 @@ public class Player : MonoBehaviour
         CurrentLane = data.laneMid;
         isInvul = false;
         _render.enabled = true;
-        _v_current = 0f;
-        _h_current = 0f;
         _v_force = 0f;
-
-
+        _v_current = 0.425f;
+        _h_current = 0f;
     }
 
+    public void ResetVelocity()
+    {
+        if(_v_force < 0f)
+            _v_force = 0f;
+        
+    }
 
     #region Other Object collision
     private void OnTriggerEnter(Collider other)

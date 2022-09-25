@@ -13,6 +13,8 @@ public class Player_state_noSwipe : Player_base_state
         base.Enter();
         player.UnlockJump();
         player.UnlockSwipe();
+        player.ResetVelocity();
+        player.SetJumpVar(data.maxJumpTime, data.maxJumpHeight);
     }
 
     public override void Exit()
@@ -30,8 +32,11 @@ public class Player_state_noSwipe : Player_base_state
         }
         if (!player.IsGrounded)
         {
+
+            player.ResetVelocity();
             stateMachine.ChangeState(player.stateJump);
         }
+        player.OnStableGround();
     }
 
     public override void PhysicsUpdate()

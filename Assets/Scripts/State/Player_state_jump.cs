@@ -55,7 +55,6 @@ public class Player_state_jump : Player_base_state
                 stateMachine.ChangeState(player.stateAirSwiping); // Air Swipe
         }
         player.AddGravity();
-        player.MoveToTarget();
     }
 
     public override void PhysicsUpdate()

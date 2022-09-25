@@ -30,7 +30,6 @@ public class Player_state_swipe : Player_base_state
         else
         {
             player.Swiping();
-            player.MoveToTarget();
         }
     }
 

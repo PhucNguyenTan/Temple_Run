@@ -45,7 +45,6 @@ public class Player_state_airSwipe : Player_base_state
             if (isSwiping)
             {
                 player.AddGravity();
-                player.MoveToTarget();
                 player.Swiping();
             }
             else
