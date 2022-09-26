@@ -184,7 +184,6 @@ public class Player : MonoBehaviour
         Vector3 move = new Vector3();
         move.y = _v_current;
         move.x = _h_current;
-        Debug.Log(move.y);
         transform.position = move;
     }
 

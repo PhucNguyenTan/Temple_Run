@@ -23,7 +23,7 @@ public class InputHandler : MonoBehaviour
 
     [SerializeField] float _minSwipeLength = 0.1f;
     [SerializeField] float _maxSwipeTime = 0.5f;
-    [SerializeField] float _directionThreshold = .3f;
+    [SerializeField] float _directionThreshold = 1f;
 
     private void Awake()
     {
@@ -32,7 +32,6 @@ public class InputHandler : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
             Destroy(gameObject);
@@ -49,6 +48,7 @@ public class InputHandler : MonoBehaviour
         _input.Player.PrimaryContact.canceled += EndTouch;
 
     }
+
 
     private void StartedTouch(InputAction.CallbackContext ctx)
     {
@@ -95,6 +95,8 @@ public class InputHandler : MonoBehaviour
         _input.Player.Right.performed -= PressRight;
         _input.Player.Up.performed -= PressUp;
         _input.Player.Down.performed -= PressDown;
+        _input.Player.PrimaryContact.started -= StartedTouch;
+        _input.Player.PrimaryContact.canceled -= EndTouch;
         _input.Player.Disable();
     }
     private void PressDown(InputAction.CallbackContext obj)

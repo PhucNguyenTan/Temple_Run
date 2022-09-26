@@ -61,4 +61,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c447f7ae60f21c240b60a5fe20dbf546, type: 3}
   CrashAudio:
   - {fileID: 8300000, guid: 6350fd7a7e86bca488d227cda2e5f13c, type: 3}
-  IsShowStatesName: 1
+  IsShowStatesName: 0
